@@ -72,8 +72,9 @@ final class Plugin
         $aggregator = new Aggregator();
         $builder = new CartContextBuilder();
 
-        (new CartHooks($rulesRepo, $calculator, $aggregator, $builder))->register();
-        (new OrderDiscountLogger($rulesRepo, $orderDiscountsRepo, $calculator, $aggregator, $builder))->register();
+        $cartHooks = new CartHooks($rulesRepo, $calculator, $aggregator, $builder);
+        $cartHooks->register();
+        (new OrderDiscountLogger($rulesRepo, $orderDiscountsRepo, $cartHooks))->register();
     }
 
     private function buildStrategyRegistry(): StrategyRegistry

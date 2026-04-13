@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace PowerDiscount\Integration;
 
-use PowerDiscount\Engine\Aggregator;
-use PowerDiscount\Engine\Calculator;
 use PowerDiscount\Repository\OrderDiscountRepository;
 use PowerDiscount\Repository\RuleRepository;
 
@@ -12,22 +10,16 @@ final class OrderDiscountLogger
 {
     private RuleRepository $rules;
     private OrderDiscountRepository $orderDiscounts;
-    private Calculator $calculator;
-    private Aggregator $aggregator;
-    private CartContextBuilder $builder;
+    private CartHooks $cartHooks;
 
     public function __construct(
         RuleRepository $rules,
         OrderDiscountRepository $orderDiscounts,
-        Calculator $calculator,
-        Aggregator $aggregator,
-        CartContextBuilder $builder
+        CartHooks $cartHooks
     ) {
         $this->rules = $rules;
         $this->orderDiscounts = $orderDiscounts;
-        $this->calculator = $calculator;
-        $this->aggregator = $aggregator;
-        $this->builder = $builder;
+        $this->cartHooks = $cartHooks;
     }
 
     public function register(): void
@@ -40,11 +32,14 @@ final class OrderDiscountLogger
         if (!function_exists('WC') || WC()->cart === null) {
             return;
         }
-        $context = $this->builder->fromWcCart(WC()->cart);
-        $activeRules = $this->rules->getActiveRules();
-        $results = $this->calculator->run($activeRules, $context);
+
+        $results = $this->cartHooks->getLastResultsForCart(WC()->cart);
+        if ($results === null || $results === []) {
+            return;
+        }
 
         $titles = [];
+        $activeRules = $this->rules->getActiveRules();
         foreach ($activeRules as $rule) {
             $titles[$rule->getId()] = $rule->getTitle();
         }
@@ -54,5 +49,7 @@ final class OrderDiscountLogger
         foreach ($results as $result) {
             $this->rules->incrementUsedCount($result->getRuleId());
         }
+
+        $this->cartHooks->clearResultsForCart(WC()->cart);
     }
 }

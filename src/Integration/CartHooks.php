@@ -57,6 +57,22 @@ final class CartHooks
         }
     }
 
+    /**
+     * Expose last computed results for a cart object, used by OrderDiscountLogger
+     * to avoid recomputing against the already-mutated cart at checkout.
+     *
+     * @return \PowerDiscount\Domain\DiscountResult[]|null
+     */
+    public function getLastResultsForCart(\WC_Cart $cart): ?array
+    {
+        return $this->lastResultsByHash[spl_object_id($cart)] ?? null;
+    }
+
+    public function clearResultsForCart(\WC_Cart $cart): void
+    {
+        unset($this->lastResultsByHash[spl_object_id($cart)]);
+    }
+
     public function applyCartFees(WC_Cart $cart): void
     {
         $results = $this->lastResultsByHash[spl_object_id($cart)] ?? null;
