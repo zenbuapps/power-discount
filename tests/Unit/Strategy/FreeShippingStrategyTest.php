@@ -54,6 +54,20 @@ final class FreeShippingStrategyTest extends TestCase
         self::assertNull((new FreeShippingStrategy())->apply($rule, $ctx));
     }
 
+    public function testPercentageBelowZeroReturnsNull(): void
+    {
+        $rule = $this->rule(['method' => 'percentage_off_shipping', 'value' => -5]);
+        $ctx = new CartContext([new CartItem(1, 'A', 100.0, 1, [])]);
+        self::assertNull((new FreeShippingStrategy())->apply($rule, $ctx));
+    }
+
+    public function testPercentageAboveHundredReturnsNull(): void
+    {
+        $rule = $this->rule(['method' => 'percentage_off_shipping', 'value' => 150]);
+        $ctx = new CartContext([new CartItem(1, 'A', 100.0, 1, [])]);
+        self::assertNull((new FreeShippingStrategy())->apply($rule, $ctx));
+    }
+
     private function rule(array $config): Rule
     {
         return new Rule(['id' => 1, 'title' => 't', 'type' => 'free_shipping', 'config' => $config]);

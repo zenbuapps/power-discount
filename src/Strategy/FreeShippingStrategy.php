@@ -28,6 +28,12 @@ final class FreeShippingStrategy implements DiscountStrategyInterface
             return null;
         }
 
+        if ($method === 'percentage_off_shipping') {
+            if ($value <= 0 || $value > 100) {
+                return null;
+            }
+        }
+
         // Sentinel amount: the real shipping-line subtraction lives in Phase 4 ShippingHooks.
         // Amount > 0 is required for DiscountResult::hasDiscount() to pass aggregation.
         $sentinel = 1.0;
