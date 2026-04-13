@@ -1,0 +1,6 @@
+/vendor/
+/node_modules/
+/assets/admin-editor/build/
+/.phpunit.result.cache
+/composer.lock
+.DS_Store

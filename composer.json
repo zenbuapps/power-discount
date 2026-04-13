@@ -1,0 +1,25 @@
+{
+  "name": "luke/power-discount",
+  "description": "WooCommerce discount rules engine - Taiwan-first.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "php": ">=7.4"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^9.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "PowerDiscount\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "PowerDiscount\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
