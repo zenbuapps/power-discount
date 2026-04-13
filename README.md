@@ -4,14 +4,16 @@ WooCommerce discount rules engine — Taiwan-first.
 
 ## Status
 
-**Phase 2 (Engine + WC Integration)** — complete.
+**Phase 3 (Taiwan Strategies)** — complete.
 
-- Repository with DatabaseAdapter abstraction (fully unit-tested via InMemoryDatabaseAdapter)
-- Condition system + 2 conditions: `cart_subtotal`, `date_range`
-- Filter system + 2 filters: `all_products`, `categories`
-- Engine: Calculator, Aggregator, ExclusivityResolver
-- WooCommerce hooks: `woocommerce_before_calculate_totals`, `woocommerce_cart_calculate_fees`, `woocommerce_checkout_order_processed`
-- Order discount logging to `wp_pd_order_discounts`
+- All 8 strategies now registered: `simple`, `bulk`, `cart`, `set`, `buy_x_get_y`, `nth_item`, `cross_category`, `free_shipping`
+- Taiwan-first features:
+  - **Buy X Get Y** (same / specific / cheapest_in_cart targets)
+  - **第 N 件 X 折** (NthItemStrategy with recursive cycles)
+  - **紅配綠** (CrossCategoryStrategy with multi-group bundles)
+  - **免運** (FreeShipping, shipping-scope sentinel — real shipping manipulation lands in Phase 4)
+
+Still pending: remaining 11 conditions + 4 filters (Phase 4), Admin UI (Phase 4), Frontend (Phase 4), real ShippingHooks (Phase 4).
 
 ## Requirements
 

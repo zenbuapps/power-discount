@@ -22,7 +22,11 @@ use PowerDiscount\Persistence\WpdbAdapter;
 use PowerDiscount\Repository\OrderDiscountRepository;
 use PowerDiscount\Repository\RuleRepository;
 use PowerDiscount\Strategy\BulkStrategy;
+use PowerDiscount\Strategy\BuyXGetYStrategy;
 use PowerDiscount\Strategy\CartStrategy;
+use PowerDiscount\Strategy\CrossCategoryStrategy;
+use PowerDiscount\Strategy\FreeShippingStrategy;
+use PowerDiscount\Strategy\NthItemStrategy;
 use PowerDiscount\Strategy\SetStrategy;
 use PowerDiscount\Strategy\SimpleStrategy;
 use PowerDiscount\Strategy\StrategyRegistry;
@@ -84,6 +88,10 @@ final class Plugin
         $registry->register(new BulkStrategy());
         $registry->register(new CartStrategy());
         $registry->register(new SetStrategy());
+        $registry->register(new BuyXGetYStrategy());
+        $registry->register(new NthItemStrategy());
+        $registry->register(new CrossCategoryStrategy());
+        $registry->register(new FreeShippingStrategy());
 
         $registry = apply_filters('power_discount_strategies', $registry);
         if (!$registry instanceof StrategyRegistry) {
