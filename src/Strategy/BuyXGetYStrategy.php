@@ -104,7 +104,7 @@ final class BuyXGetYStrategy implements DiscountStrategyInterface
                 $affected[$ru['product_id']] = true;
                 // Remove that reward from remaining to prevent re-use.
                 foreach ($remaining as $rk => $runit) {
-                    if ($runit === $ru) {
+                    if ($runit['uid'] === $ru['uid']) {
                         unset($remaining[$rk]);
                         break;
                     }
@@ -129,14 +129,19 @@ final class BuyXGetYStrategy implements DiscountStrategyInterface
     }
 
     /**
-     * @return array<int, array{product_id:int,price:float}>
+     * @return array<int, array{uid:int,product_id:int,price:float}>
      */
     private function flattenUnits(CartContext $context): array
     {
         $units = [];
+        $uid = 0;
         foreach ($context->getItems() as $item) {
             for ($i = 0; $i < $item->getQuantity(); $i++) {
-                $units[] = ['product_id' => $item->getProductId(), 'price' => $item->getPrice()];
+                $units[] = [
+                    'uid'        => $uid++,
+                    'product_id' => $item->getProductId(),
+                    'price'      => $item->getPrice(),
+                ];
             }
         }
         return $units;
@@ -225,7 +230,8 @@ final class BuyXGetYStrategy implements DiscountStrategyInterface
             case 'free':
                 return $unitPrice;
             case 'percentage':
-                return $unitPrice * ($value / 100);
+                $capped = max(0.0, min(100.0, $value));
+                return $unitPrice * ($capped / 100);
             case 'flat':
                 return min($unitPrice, $value);
         }
