@@ -47,10 +47,6 @@ final class OrderDiscountRepository
      */
     public function findByOrderId(int $orderId): array
     {
-        return $this->db->selectAll('SELECT_ALL_FROM:' . $this->db->table(self::TABLE), [
-            static function (array $row) use ($orderId): bool {
-                return (int) $row['order_id'] === $orderId;
-            },
-        ]);
+        return $this->db->findWhere($this->db->table(self::TABLE), ['order_id' => $orderId]);
     }
 }
