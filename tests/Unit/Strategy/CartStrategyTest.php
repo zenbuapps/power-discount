@@ -71,6 +71,13 @@ final class CartStrategyTest extends TestCase
         self::assertNull((new CartStrategy())->apply($rule, $ctx));
     }
 
+    public function testInvalidMethodReturnsNull(): void
+    {
+        $rule = $this->rule(['method' => 'nonsense', 'value' => 10]);
+        $ctx = new CartContext([new CartItem(1, 'A', 100.0, 1, [])]);
+        self::assertNull((new CartStrategy())->apply($rule, $ctx));
+    }
+
     private function rule(array $config): Rule
     {
         return new Rule(['id' => 1, 'title' => 't', 'type' => 'cart', 'config' => $config]);
