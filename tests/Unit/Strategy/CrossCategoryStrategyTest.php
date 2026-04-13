@@ -132,10 +132,27 @@ final class CrossCategoryStrategyTest extends TestCase
         $rule = $this->rule([
             'groups' => [
                 ['name' => 'A', 'filter' => ['type' => 'categories', 'value' => [1]], 'min_qty' => 1],
+                ['name' => 'B', 'filter' => ['type' => 'categories', 'value' => [2]], 'min_qty' => 1],
             ],
             'reward' => ['method' => 'percentage', 'value' => 10],
         ]);
         self::assertNull((new CrossCategoryStrategy())->apply($rule, new CartContext([])));
+    }
+
+    public function testZeroMinQtyReturnsNull(): void
+    {
+        $rule = $this->rule([
+            'groups' => [
+                ['name' => 'A', 'filter' => ['type' => 'categories', 'value' => [1]], 'min_qty' => 1],
+                ['name' => 'B', 'filter' => ['type' => 'categories', 'value' => [2]], 'min_qty' => 0],
+            ],
+            'reward' => ['method' => 'percentage', 'value' => 10],
+        ]);
+        $ctx = new CartContext([
+            new CartItem(1, 'A1', 100.0, 1, [1]),
+            new CartItem(2, 'B1', 100.0, 1, [2]),
+        ]);
+        self::assertNull((new CrossCategoryStrategy())->apply($rule, $ctx));
     }
 
     public function testSingleGroupReturnsNull(): void
