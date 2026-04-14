@@ -258,6 +258,9 @@ return [
     'Gift promotions available — see checkout for details.'
         => '有滿額贈優惠，詳情請見結帳頁。',
     'Free gift'                                         => '贈品',
+    'Applied'                                           => '已套用',
+    'Applied discounts'                                 => '已套用優惠',
+    'Discount'                                          => '折扣',
     'Quantity'                                          => '數量',
     '%d+'                                               => '%d 件以上',
     'Discount'                                          => '折扣',

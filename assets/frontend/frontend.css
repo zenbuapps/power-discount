@@ -56,6 +56,33 @@
     font-weight: 600;
     vertical-align: middle;
 }
+/* Applied rules summary panel above cart total */
+.pd-applied-rules-row th,
+.pd-applied-rules-row td {
+    background: #f0fdf4;
+    border-top: 1px solid #bbf7d0 !important;
+    padding: 12px !important;
+}
+.pd-applied-rules-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.pd-applied-rules-list li {
+    margin: 6px 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #166534;
+}
+.pd-applied-rule-icon { margin-right: 4px; }
+.pd-applied-rule-label { font-weight: 500; }
+.pd-applied-rule-amount {
+    margin-left: 6px;
+    color: #15803d;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
 .pd-price-table {
     border-collapse: collapse;
     margin: 12px 0;

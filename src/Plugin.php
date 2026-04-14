@@ -42,6 +42,7 @@ use PowerDiscount\Filter\OnSaleFilter;
 use PowerDiscount\Filter\ProductsFilter;
 use PowerDiscount\Filter\TagsFilter;
 use PowerDiscount\I18n\Loader as I18nLoader;
+use PowerDiscount\Integration\AppliedRulesDisplay;
 use PowerDiscount\Integration\CartContextBuilder;
 use PowerDiscount\Integration\CartHooks;
 use PowerDiscount\Integration\GiftAutoInjector;
@@ -114,6 +115,7 @@ final class Plugin
         $cartHooks->register();
         (new OrderDiscountLogger($rulesRepo, $orderDiscountsRepo, $cartHooks))->register();
         (new ShippingHooks($rulesRepo, $calculator, $aggregator, $builder, $cartHooks))->register();
+        (new AppliedRulesDisplay($cartHooks))->register();
 
         // Frontend components (cart/checkout pages)
         $shippingProgressHelper = new FreeShippingProgressHelper();
