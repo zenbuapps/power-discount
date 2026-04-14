@@ -21,11 +21,11 @@ final class RuleEditPage
         if (!current_user_can('manage_woocommerce')) {
             wp_die(esc_html__('Permission denied.', 'power-discount'));
         }
+
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
         $rule = $id > 0 ? $this->rules->findById($id) : null;
 
         if ($rule === null) {
-            // New rule scaffold with sensible defaults.
             $rule = new Rule([
                 'title'    => '',
                 'type'     => 'simple',
@@ -35,16 +35,15 @@ final class RuleEditPage
             ]);
         }
 
-        $formData = RuleFormMapper::toFormData($rule);
         $isNew = $rule->getId() === 0;
         $strategyTypes = [
-            'simple'         => __('Simple (per-product)', 'power-discount'),
-            'bulk'           => __('Bulk (quantity tiers)', 'power-discount'),
-            'cart'           => __('Cart (whole-cart discount)', 'power-discount'),
-            'set'            => __('Set (任選 N 件)', 'power-discount'),
+            'simple'         => __('Simple — percentage / flat / fixed price', 'power-discount'),
+            'bulk'           => __('Bulk — quantity tier discount', 'power-discount'),
+            'cart'           => __('Cart — whole cart discount', 'power-discount'),
+            'set'            => __('Set — 任選 N 件 (bundle)', 'power-discount'),
             'buy_x_get_y'    => __('Buy X Get Y', 'power-discount'),
-            'nth_item'       => __('Nth item (第 N 件 X 折)', 'power-discount'),
-            'cross_category' => __('Cross-category (紅配綠)', 'power-discount'),
+            'nth_item'       => __('Nth item — 第 N 件 X 折', 'power-discount'),
+            'cross_category' => __('Cross-category — 紅配綠', 'power-discount'),
             'free_shipping'  => __('Free Shipping', 'power-discount'),
         ];
 
