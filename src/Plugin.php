@@ -95,7 +95,7 @@ final class Plugin
         $cartHooks = new CartHooks($rulesRepo, $calculator, $aggregator, $builder);
         $cartHooks->register();
         (new OrderDiscountLogger($rulesRepo, $orderDiscountsRepo, $cartHooks))->register();
-        (new ShippingHooks($rulesRepo, $calculator, $aggregator, $builder))->register();
+        (new ShippingHooks($rulesRepo, $calculator, $aggregator, $builder, $cartHooks))->register();
     }
 
     private function buildStrategyRegistry(): StrategyRegistry

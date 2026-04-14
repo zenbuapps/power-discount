@@ -14,17 +14,20 @@ final class ShippingHooks
     private Calculator $calculator;
     private Aggregator $aggregator;
     private CartContextBuilder $builder;
+    private CartHooks $cartHooks;
 
     public function __construct(
         RuleRepository $rules,
         Calculator $calculator,
         Aggregator $aggregator,
-        CartContextBuilder $builder
+        CartContextBuilder $builder,
+        CartHooks $cartHooks
     ) {
         $this->rules = $rules;
         $this->calculator = $calculator;
         $this->aggregator = $aggregator;
         $this->builder = $builder;
+        $this->cartHooks = $cartHooks;
     }
 
     public function register(): void
@@ -43,11 +46,19 @@ final class ShippingHooks
             return $rates;
         }
 
-        $context = $this->builder->fromWcCart(WC()->cart);
-        $activeRules = $this->rules->getActiveRules();
-        $results = $this->calculator->run($activeRules, $context);
-        $summary = $this->aggregator->aggregate($results);
+        // Prefer the CartHooks cache so we evaluate against the same snapshot
+        // used for product/cart discounts (and don't see post-mutation prices).
+        $cached = $this->cartHooks->getLastResultsForCart(WC()->cart);
+        if ($cached !== null) {
+            $results = $cached;
+        } else {
+            // Fallback: shipping rate calc fired before cart totals. Compute fresh.
+            $context = $this->builder->fromWcCart(WC()->cart);
+            $activeRules = $this->rules->getActiveRules();
+            $results = $this->calculator->run($activeRules, $context);
+        }
 
+        $summary = $this->aggregator->aggregate($results);
         $shippingResults = $summary->shippingResults();
         if ($shippingResults === []) {
             return $rates;
@@ -61,7 +72,7 @@ final class ShippingHooks
     }
 
     /**
-     * @param array<string, mixed> $rates  (passed by reference through parent return)
+     * @param array<string, mixed> $rates
      */
     private function applyShippingResult(array &$rates, DiscountResult $result): void
     {
