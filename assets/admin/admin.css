@@ -179,8 +179,15 @@
 .wp-list-table.widefat.rules {
     border: 1px solid #dcdcde;
     border-radius: 8px;
-    overflow: hidden;
+    /* overflow must stay visible so the help-tip tooltip isn't clipped */
+    overflow: visible;
     box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.wp-list-table.rules thead th:first-child {
+    border-top-left-radius: 8px;
+}
+.wp-list-table.rules thead th:last-child {
+    border-top-right-radius: 8px;
 }
 .wp-list-table.rules thead th,
 .wp-list-table.rules tfoot th {
