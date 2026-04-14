@@ -240,6 +240,13 @@ return [
     'Require logged in'                                 => '必須已登入',
     'Customer first order only'                         => '僅限首次購買',
     'Match current month'                               => '比對當前月份',
+    'Mon' => '一',
+    'Tue' => '二',
+    'Wed' => '三',
+    'Thu' => '四',
+    'Fri' => '五',
+    'Sat' => '六',
+    'Sun' => '日',
 
     // === Reports page ===
     'Power Discount Reports'                            => '折扣規則報表',

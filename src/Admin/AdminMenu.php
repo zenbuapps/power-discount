@@ -100,6 +100,50 @@ final class AdminMenu
         wp_localize_script('power-discount-admin', 'PowerDiscountAdmin', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
             'nonce'   => wp_create_nonce('power_discount_admin'),
+            'i18n'    => [
+                // Filter type labels
+                'allProducts'      => __('All products', 'power-discount'),
+                'specificProducts' => __('Specific products', 'power-discount'),
+                'categories'       => __('Categories', 'power-discount'),
+                'tags'             => __('Tags', 'power-discount'),
+                'attributes'       => __('Attributes', 'power-discount'),
+                'onSale'           => __('On sale', 'power-discount'),
+                'inList'           => __('in list', 'power-discount'),
+                'notInList'        => __('not in list', 'power-discount'),
+                'searchProducts'   => __('Search products', 'power-discount'),
+                'selectCategories' => __('Select categories', 'power-discount'),
+                'selectTags'       => __('Select tags', 'power-discount'),
+                // Condition type labels
+                'cartSubtotal'         => __('Cart subtotal', 'power-discount'),
+                'cartQuantity'         => __('Cart total quantity', 'power-discount'),
+                'cartLineItems'        => __('Number of line items', 'power-discount'),
+                'totalSpent'           => __('Customer total spent (lifetime)', 'power-discount'),
+                'userRole'             => __('User role', 'power-discount'),
+                'userLoggedIn'         => __('User logged in', 'power-discount'),
+                'paymentMethod'        => __('Payment method', 'power-discount'),
+                'shippingMethod'       => __('Shipping method', 'power-discount'),
+                'dateRange'            => __('Date range', 'power-discount'),
+                'dayOfWeek'            => __('Day of week', 'power-discount'),
+                'timeOfDay'            => __('Time of day', 'power-discount'),
+                'firstOrder'           => __('First order', 'power-discount'),
+                'birthdayMonth'        => __('Birthday month', 'power-discount'),
+                'requireLoggedIn'      => __('Require logged in', 'power-discount'),
+                'firstOrderOnly'       => __('Customer first order only', 'power-discount'),
+                'matchCurrentMonth'    => __('Match current month', 'power-discount'),
+                // Day of week (short)
+                'dayMon' => __('Mon', 'power-discount'),
+                'dayTue' => __('Tue', 'power-discount'),
+                'dayWed' => __('Wed', 'power-discount'),
+                'dayThu' => __('Thu', 'power-discount'),
+                'dayFri' => __('Fri', 'power-discount'),
+                'daySat' => __('Sat', 'power-discount'),
+                'daySun' => __('Sun', 'power-discount'),
+                // Cross-category group fields
+                'groupName'      => __('Group name', 'power-discount'),
+                'minQty'         => __('Min qty', 'power-discount'),
+                'removeGroup'    => __('Remove group', 'power-discount'),
+                'groupNameTops'  => __('e.g. Tops', 'power-discount'),
+            ],
         ]);
     }
 }

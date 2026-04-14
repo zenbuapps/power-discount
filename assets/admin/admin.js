@@ -93,28 +93,29 @@
 
     function addFilterRow($container) {
         var idx = nextIndex($container);
+        var t = (PowerDiscountAdmin && PowerDiscountAdmin.i18n) || {};
         var html = ''
             + '<div class="pd-repeater-row pd-filter-row">'
             + '<select name="filters[items][' + idx + '][type]" class="pd-filter-type">'
-            + '<option value="all_products">All products</option>'
-            + '<option value="products">Specific products</option>'
-            + '<option value="categories">Categories</option>'
-            + '<option value="tags">Tags</option>'
-            + '<option value="attributes">Attributes</option>'
-            + '<option value="on_sale">On sale</option>'
+            + '<option value="all_products">' + (t.allProducts || 'All products') + '</option>'
+            + '<option value="products">' + (t.specificProducts || 'Specific products') + '</option>'
+            + '<option value="categories">' + (t.categories || 'Categories') + '</option>'
+            + '<option value="tags">' + (t.tags || 'Tags') + '</option>'
+            + '<option value="attributes">' + (t.attributes || 'Attributes') + '</option>'
+            + '<option value="on_sale">' + (t.onSale || 'On sale') + '</option>'
             + '</select>'
             + '<select name="filters[items][' + idx + '][method]" class="pd-filter-method" style="display:none">'
-            + '<option value="in">in list</option>'
-            + '<option value="not_in">not in list</option>'
+            + '<option value="in">' + (t.inList || 'in list') + '</option>'
+            + '<option value="not_in">' + (t.notInList || 'not in list') + '</option>'
             + '</select>'
             + '<span class="pd-filter-value pd-filter-value-products" style="display:none">'
-            + '<select name="filters[items][' + idx + '][ids][]" class="wc-product-search" multiple data-placeholder="Search products" data-action="woocommerce_json_search_products_and_variations" style="min-width:300px;"></select>'
+            + '<select name="filters[items][' + idx + '][ids][]" class="wc-product-search" multiple data-placeholder="' + (t.searchProducts || 'Search products') + '" data-action="woocommerce_json_search_products_and_variations" style="min-width:300px;"></select>'
             + '</span>'
             + '<span class="pd-filter-value pd-filter-value-categories" style="display:none">'
-            + '<select name="filters[items][' + idx + '][ids][]" class="pd-category-select" multiple data-placeholder="Select categories" style="min-width:300px;"></select>'
+            + '<select name="filters[items][' + idx + '][ids][]" class="pd-category-select" multiple data-placeholder="' + (t.selectCategories || 'Select categories') + '" style="min-width:300px;"></select>'
             + '</span>'
             + '<span class="pd-filter-value pd-filter-value-tags" style="display:none">'
-            + '<select name="filters[items][' + idx + '][ids][]" class="pd-tag-select" multiple data-placeholder="Select tags" style="min-width:300px;"></select>'
+            + '<select name="filters[items][' + idx + '][ids][]" class="pd-tag-select" multiple data-placeholder="' + (t.selectTags || 'Select tags') + '" style="min-width:300px;"></select>'
             + '</span>'
             + '<button type="button" class="button button-small pd-repeater-remove">×</button>'
             + '</div>';
@@ -124,22 +125,27 @@
 
     function addConditionRow($container) {
         var idx = nextIndex($container);
+        var t = (PowerDiscountAdmin && PowerDiscountAdmin.i18n) || {};
+        var dayLabels = [
+            t.dayMon || 'Mon', t.dayTue || 'Tue', t.dayWed || 'Wed',
+            t.dayThu || 'Thu', t.dayFri || 'Fri', t.daySat || 'Sat', t.daySun || 'Sun'
+        ];
         var html = ''
             + '<div class="pd-repeater-row pd-condition-row">'
             + '<select name="conditions[items][' + idx + '][type]" class="pd-condition-type">'
-            + '<option value="cart_subtotal">Cart subtotal</option>'
-            + '<option value="cart_quantity">Cart total quantity</option>'
-            + '<option value="cart_line_items">Number of line items</option>'
-            + '<option value="total_spent">Customer total spent (lifetime)</option>'
-            + '<option value="user_role">User role</option>'
-            + '<option value="user_logged_in">User logged in</option>'
-            + '<option value="payment_method">Payment method</option>'
-            + '<option value="shipping_method">Shipping method</option>'
-            + '<option value="date_range">Date range</option>'
-            + '<option value="day_of_week">Day of week</option>'
-            + '<option value="time_of_day">Time of day</option>'
-            + '<option value="first_order">First order</option>'
-            + '<option value="birthday_month">Birthday month</option>'
+            + '<option value="cart_subtotal">' + (t.cartSubtotal || 'Cart subtotal') + '</option>'
+            + '<option value="cart_quantity">' + (t.cartQuantity || 'Cart total quantity') + '</option>'
+            + '<option value="cart_line_items">' + (t.cartLineItems || 'Number of line items') + '</option>'
+            + '<option value="total_spent">' + (t.totalSpent || 'Customer total spent (lifetime)') + '</option>'
+            + '<option value="user_role">' + (t.userRole || 'User role') + '</option>'
+            + '<option value="user_logged_in">' + (t.userLoggedIn || 'User logged in') + '</option>'
+            + '<option value="payment_method">' + (t.paymentMethod || 'Payment method') + '</option>'
+            + '<option value="shipping_method">' + (t.shippingMethod || 'Shipping method') + '</option>'
+            + '<option value="date_range">' + (t.dateRange || 'Date range') + '</option>'
+            + '<option value="day_of_week">' + (t.dayOfWeek || 'Day of week') + '</option>'
+            + '<option value="time_of_day">' + (t.timeOfDay || 'Time of day') + '</option>'
+            + '<option value="first_order">' + (t.firstOrder || 'First order') + '</option>'
+            + '<option value="birthday_month">' + (t.birthdayMonth || 'Birthday month') + '</option>'
             + '</select>'
             + '<span class="pd-cond-fields" data-for="cart_subtotal,cart_quantity,cart_line_items,total_spent">'
             + '<select name="conditions[items][' + idx + '][operator]">'
@@ -151,7 +157,7 @@
             + '<input type="text" name="conditions[items][' + idx + '][roles_csv]" class="regular-text" placeholder="customer, subscriber">'
             + '</span>'
             + '<span class="pd-cond-fields" data-for="user_logged_in" style="display:none">'
-            + '<label><input type="checkbox" name="conditions[items][' + idx + '][is_logged_in]" value="1"> Require logged in</label>'
+            + '<label><input type="checkbox" name="conditions[items][' + idx + '][is_logged_in]" value="1"> ' + (t.requireLoggedIn || 'Require logged in') + '</label>'
             + '</span>'
             + '<span class="pd-cond-fields" data-for="payment_method,shipping_method" style="display:none">'
             + '<input type="text" name="conditions[items][' + idx + '][methods_csv]" class="regular-text" placeholder="cod, bacs, stripe">'
@@ -161,7 +167,7 @@
             + '<input type="text" name="conditions[items][' + idx + '][to]" placeholder="YYYY-MM-DD HH:MM:SS">'
             + '</span>'
             + '<span class="pd-cond-fields" data-for="day_of_week" style="display:none">'
-            + ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(function(l, k){
+            + dayLabels.map(function(l, k){
                 return '<label><input type="checkbox" name="conditions[items][' + idx + '][days][]" value="' + (k+1) + '"> ' + l + '</label>';
             }).join(' ')
             + '</span>'
@@ -170,10 +176,10 @@
             + '<input type="text" name="conditions[items][' + idx + '][to]" placeholder="HH:MM" style="width:70px;">'
             + '</span>'
             + '<span class="pd-cond-fields" data-for="first_order" style="display:none">'
-            + '<label><input type="checkbox" name="conditions[items][' + idx + '][is_first_order]" value="1"> First order only</label>'
+            + '<label><input type="checkbox" name="conditions[items][' + idx + '][is_first_order]" value="1"> ' + (t.firstOrderOnly || 'First order only') + '</label>'
             + '</span>'
             + '<span class="pd-cond-fields" data-for="birthday_month" style="display:none">'
-            + '<label><input type="checkbox" name="conditions[items][' + idx + '][match_current_month]" value="1"> Match current month</label>'
+            + '<label><input type="checkbox" name="conditions[items][' + idx + '][match_current_month]" value="1"> ' + (t.matchCurrentMonth || 'Match current month') + '</label>'
             + '</span>'
             + '<button type="button" class="button button-small pd-repeater-remove">×</button>'
             + '</div>';
@@ -192,19 +198,20 @@
 
     function addXCatGroupRow($container) {
         var idx = nextIndex($container);
+        var t = (PowerDiscountAdmin && PowerDiscountAdmin.i18n) || {};
         var html = ''
             + '<div class="pd-repeater-row pd-group-row">'
-            + '<button type="button" class="button button-small pd-repeater-remove pd-group-remove" title="Remove group">×</button>'
+            + '<button type="button" class="button button-small pd-repeater-remove pd-group-remove" title="' + (t.removeGroup || 'Remove group') + '">×</button>'
             + '<div class="pd-group-field">'
-            + '<label>Group name</label>'
-            + '<input type="text" name="config_by_type[cross_category][groups][' + idx + '][name]" class="regular-text" placeholder="e.g. Tops">'
+            + '<label>' + (t.groupName || 'Group name') + '</label>'
+            + '<input type="text" name="config_by_type[cross_category][groups][' + idx + '][name]" class="regular-text" placeholder="' + (t.groupNameTops || 'e.g. Tops') + '">'
             + '</div>'
             + '<div class="pd-group-field">'
-            + '<label>Categories</label>'
-            + '<select name="config_by_type[cross_category][groups][' + idx + '][category_ids][]" class="pd-category-select" multiple style="min-width:300px;" data-placeholder="Select categories"></select>'
+            + '<label>' + (t.categories || 'Categories') + '</label>'
+            + '<select name="config_by_type[cross_category][groups][' + idx + '][category_ids][]" class="pd-category-select" multiple style="min-width:300px;" data-placeholder="' + (t.selectCategories || 'Select categories') + '"></select>'
             + '</div>'
             + '<div class="pd-group-field">'
-            + '<label>Min qty</label>'
+            + '<label>' + (t.minQty || 'Min qty') + '</label>'
             + '<input type="number" name="config_by_type[cross_category][groups][' + idx + '][min_qty]" value="1" min="1" class="small-text">'
             + '</div>'
             + '</div>';
