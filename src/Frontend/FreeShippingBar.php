@@ -53,7 +53,7 @@ final class FreeShippingBar
         }
 
         if ($progress->achieved) {
-            $message = esc_html__('🎉 You qualify for free shipping!', 'power-discount');
+            $message = '🎉 ' . esc_html__('You qualify for free shipping!', 'power-discount');
             $percent = 100;
         } elseif ($progress->threshold !== null && $progress->remaining !== null) {
             $remainingFormatted = function_exists('wc_price')
