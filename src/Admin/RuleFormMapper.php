@@ -12,6 +12,7 @@ final class RuleFormMapper
     private const VALID_TYPES = [
         'simple', 'bulk', 'cart', 'set',
         'buy_x_get_y', 'nth_item', 'cross_category', 'free_shipping',
+        'gift_with_purchase',
     ];
 
     /**
@@ -172,6 +173,15 @@ final class RuleFormMapper
                     'method' => (string) ($raw['method'] ?? ''),
                     'value'  => isset($raw['value']) ? (float) $raw['value'] : 0.0,
                 ];
+            case 'gift_with_purchase':
+                return [
+                    'threshold'        => isset($raw['threshold']) ? (float) $raw['threshold'] : 0.0,
+                    'gift_product_ids' => array_values(array_filter(
+                        array_map('intval', (array) ($raw['gift_product_ids'] ?? [])),
+                        static function (int $id): bool { return $id > 0; }
+                    )),
+                    'gift_qty'         => max(1, isset($raw['gift_qty']) ? (int) $raw['gift_qty'] : 1),
+                ];
         }
         return [];
     }
@@ -238,6 +248,14 @@ final class RuleFormMapper
             case 'free_shipping':
                 if (!in_array($config['method'] ?? '', ['remove_shipping', 'percentage_off_shipping'], true)) {
                     throw new InvalidArgumentException('Invalid free_shipping method');
+                }
+                return;
+            case 'gift_with_purchase':
+                if (($config['threshold'] ?? 0) <= 0) {
+                    throw new InvalidArgumentException('Gift with purchase needs a threshold > 0.');
+                }
+                if (empty($config['gift_product_ids'])) {
+                    throw new InvalidArgumentException('Gift with purchase needs at least one gift product.');
                 }
                 return;
         }

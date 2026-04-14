@@ -52,6 +52,7 @@ use PowerDiscount\Strategy\BuyXGetYStrategy;
 use PowerDiscount\Strategy\CartStrategy;
 use PowerDiscount\Strategy\CrossCategoryStrategy;
 use PowerDiscount\Strategy\FreeShippingStrategy;
+use PowerDiscount\Strategy\GiftWithPurchaseStrategy;
 use PowerDiscount\Strategy\NthItemStrategy;
 use PowerDiscount\Strategy\SetStrategy;
 use PowerDiscount\Strategy\SimpleStrategy;
@@ -133,6 +134,7 @@ final class Plugin
         $registry->register(new NthItemStrategy());
         $registry->register(new CrossCategoryStrategy());
         $registry->register(new FreeShippingStrategy());
+        $registry->register(new GiftWithPurchaseStrategy());
 
         $registry = apply_filters('power_discount_strategies', $registry);
         if (!$registry instanceof StrategyRegistry) {

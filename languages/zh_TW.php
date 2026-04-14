@@ -71,6 +71,7 @@ return [
     'Nth item — 第 N 件 X 折'                           => 'Nth item — 第 N 件 X 折',
     'Cross-category — 紅配綠（跨類組合）'                  => 'Cross-category — 紅配綠（跨類組合）',
     'Free Shipping — 條件免運'                           => 'Free Shipping — 條件免運',
+    'Gift with purchase — 滿額贈'                        => 'Gift with purchase — 滿額贈',
 
     // === Strategy descriptions (already Chinese; passthrough) ===
     '對符合篩選條件的每件商品套用一個固定折扣（百分比、扣固定金額、或設定固定售價）。最常用，例：全站 9 折、指定商品折 $50、本商品固定賣 $299。'
@@ -89,6 +90,8 @@ return [
         => '要求顧客同時購買多個分類的商品才能享折扣。例：上衣一件 + 褲子一件，整組 8 折。可形成多組重複套用。',
     '條件達成後，免除全部運費或運費打折。例：滿 $1000 免運、特定運送方式運費半價。'
         => '條件達成後，免除全部運費或運費打折。例：滿 $1000 免運、特定運送方式運費半價。',
+    '購物車金額達到門檻就送指定商品。顧客需自行把贈品加入購物車，系統會自動把它的價格折抵為 0。例：滿 $1000 送馬克杯。'
+        => '購物車金額達到門檻就送指定商品。顧客需自行把贈品加入購物車，系統會自動把它的價格折抵為 0。例：滿 $1000 送馬克杯。',
 
     // === Strategy: simple ===
     'Discount method'                                   => '折扣方式',
@@ -166,6 +169,16 @@ return [
     'Remove shipping entirely'                          => '完全免運',
     'Percentage off shipping cost'                      => '運費按百分比折扣',
     'Percentage off (1–100)'                            => '折扣百分比（1–100）',
+
+    // === Strategy: gift_with_purchase ===
+    'Spend threshold'                                   => '滿額門檻',
+    'When cart subtotal reaches this amount, the gift becomes free.'
+        => '購物車小計達到此金額後，贈品就會變免費。',
+    'Gift products'                                     => '贈品商品',
+    'Search gift products'                              => '搜尋贈品商品',
+    'Customers must add the gift to the cart themselves; the plugin will discount it to NT$0 once the threshold is met. If multiple gifts are eligible, the most expensive one is freed.'
+        => '顧客需自行將贈品加入購物車，系統會在達到門檻後自動把它折抵為 NT$0。若多個贈品都符合，會優先折抵最貴的那件。',
+    'Gift quantity'                                     => '贈品數量',
 
     // === Filter builder ===
     'Which products in the cart should this rule apply to? Leave empty to apply to all products.'

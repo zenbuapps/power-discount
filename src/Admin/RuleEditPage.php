@@ -69,6 +69,10 @@ final class RuleEditPage
                 'label'       => __('Free Shipping — 條件免運', 'power-discount'),
                 'description' => __('條件達成後，免除全部運費或運費打折。例：滿 $1000 免運、特定運送方式運費半價。', 'power-discount'),
             ],
+            'gift_with_purchase' => [
+                'label'       => __('Gift with purchase — 滿額贈', 'power-discount'),
+                'description' => __('購物車金額達到門檻就送指定商品。顧客需自行把贈品加入購物車，系統會自動把它的價格折抵為 0。例：滿 $1000 送馬克杯。', 'power-discount'),
+            ],
         ];
 
         require POWER_DISCOUNT_DIR . 'src/Admin/views/rule-edit.php';
