@@ -5,11 +5,11 @@ $method = (string) ($config['method'] ?? 'remove_shipping');
 $value = $config['value'] ?? '';
 $selectedMethodIds = array_map('strval', (array) ($config['shipping_method_ids'] ?? []));
 
-// Build the list of all configured shipping method instances across every WC zone.
-$shippingMethodOptions = [];
+// Build a grouped view of enabled shipping methods, keyed by zone name.
+/** @var array<string, array<int, array{key: string, title: string}>> $shippingMethodGroups */
+$shippingMethodGroups = [];
 if (class_exists('WC_Shipping_Zones')) {
     $allZones = WC_Shipping_Zones::get_zones();
-    // Append "Locations not covered by your other zones" (zone 0)
     $restOfWorld = WC_Shipping_Zones::get_zone(0);
     if ($restOfWorld) {
         $allZones[] = [
@@ -37,8 +37,10 @@ if (class_exists('WC_Shipping_Zones')) {
             $title = method_exists($shippingMethod, 'get_title')
                 ? (string) $shippingMethod->get_title()
                 : $methodSlug;
-            $key = $methodSlug . ':' . $instanceId;
-            $shippingMethodOptions[$key] = sprintf('%s — %s', $zoneName, $title);
+            $shippingMethodGroups[$zoneName][] = [
+                'key'   => $methodSlug . ':' . $instanceId,
+                'title' => $title,
+            ];
         }
     }
 }
@@ -62,17 +64,29 @@ if (class_exists('WC_Shipping_Zones')) {
     <tr>
         <th><label><?php esc_html_e('Apply to which shipping methods', 'power-discount'); ?></label></th>
         <td>
-            <?php if ($shippingMethodOptions !== []): ?>
-                <select
-                    name="config_by_type[free_shipping][shipping_method_ids][]"
-                    multiple
-                    class="pd-shipping-method-select"
-                    style="min-width:360px;min-height:140px;">
-                    <?php foreach ($shippingMethodOptions as $optKey => $optLabel): ?>
-                        <option value="<?php echo esc_attr($optKey); ?>"<?php selected(in_array($optKey, $selectedMethodIds, true)); ?>><?php echo esc_html($optLabel); ?></option>
+            <?php if ($shippingMethodGroups !== []): ?>
+                <div class="pd-shipping-picker">
+                    <?php foreach ($shippingMethodGroups as $zoneName => $methods): ?>
+                        <div class="pd-shipping-zone">
+                            <div class="pd-shipping-zone-name"><?php echo esc_html((string) $zoneName); ?></div>
+                            <div class="pd-shipping-chips">
+                                <?php foreach ($methods as $method):
+                                    $checked = in_array($method['key'], $selectedMethodIds, true);
+                                ?>
+                                    <label class="pd-shipping-chip<?php echo $checked ? ' is-selected' : ''; ?>">
+                                        <input
+                                            type="checkbox"
+                                            name="config_by_type[free_shipping][shipping_method_ids][]"
+                                            value="<?php echo esc_attr($method['key']); ?>"
+                                            <?php checked($checked); ?>>
+                                        <span><?php echo esc_html($method['title']); ?></span>
+                                    </label>
+                                <?php endforeach; ?>
+                            </div>
+                        </div>
                     <?php endforeach; ?>
-                </select>
-                <p class="description"><?php esc_html_e('Leave empty to apply to ALL shipping methods. Hold ⌘ / Ctrl to select multiple.', 'power-discount'); ?></p>
+                </div>
+                <p class="description"><?php esc_html_e('All unchecked = apply to every shipping method. Click a chip to toggle selection.', 'power-discount'); ?></p>
             <?php else: ?>
                 <p class="description"><?php esc_html_e('No shipping methods are configured in WooCommerce yet. Set up shipping zones in WooCommerce → Settings → Shipping first.', 'power-discount'); ?></p>
             <?php endif; ?>

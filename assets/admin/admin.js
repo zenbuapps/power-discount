@@ -316,6 +316,11 @@
         }
     }
 
+    // --- Shipping method chip picker (free shipping strategy) ---
+    $(document).on('change', '.pd-shipping-chip input[type="checkbox"]', function () {
+        $(this).closest('.pd-shipping-chip').toggleClass('is-selected', this.checked);
+    });
+
     // --- Schedule mode toggle (once vs monthly) ---
     $(document).on('change', '.pd-schedule-mode', function () {
         var mode = $(this).val();
