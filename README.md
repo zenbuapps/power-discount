@@ -25,7 +25,7 @@
 - [畫面截圖](#畫面截圖)
 - [常見問題](#常見問題)
 - [系統需求](#系統需求)
-- [開發者資訊](#開發者資訊)
+- [技術架構](#技術架構)
 - [授權](#授權)
 
 ---
@@ -233,9 +233,7 @@ composer install --no-dev --optimize-autoloader
 
 ---
 
-## 開發者資訊
-
-### 架構
+## 技術架構
 
 Power Discount 採用 Strategy Pattern + Registry 設計，Domain 層完全與 WooCommerce 解耦：
 
@@ -253,15 +251,6 @@ src/
 ├── Frontend/       # 前台元件（GiftProgressBar、FreeShippingBar）
 ├── Install/        # Migrator、Activator
 └── I18n/           # 執行階段 gettext filter，免 .mo 編譯
-```
-
-### 開發環境
-
-本專案內建 Docker 開發環境，只要安裝 Docker / Colima 即可快速啟動：
-
-```bash
-cd dev
-docker compose up -d
 ```
 
 ---
