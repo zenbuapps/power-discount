@@ -56,7 +56,8 @@ final class RuleEditPage
         if (!current_user_can('manage_woocommerce')) {
             wp_die(esc_html__('Permission denied.', 'power-discount'));
         }
-        check_admin_referer('pd_save_rule');
+        $postedId = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        check_admin_referer('pd_save_rule_' . $postedId);
 
         $post = wp_unslash($_POST);
         if (!is_array($post)) {

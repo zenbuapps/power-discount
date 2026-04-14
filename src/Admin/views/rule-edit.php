@@ -21,7 +21,7 @@ $listUrl = admin_url('admin.php?page=power-discount');
     <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>">
         <input type="hidden" name="action" value="pd_save_rule">
         <input type="hidden" name="id" value="<?php echo (int) $formData['id']; ?>">
-        <?php wp_nonce_field('pd_save_rule'); ?>
+        <?php wp_nonce_field('pd_save_rule_' . (int) $formData['id']); ?>
 
         <table class="form-table">
             <tr>
