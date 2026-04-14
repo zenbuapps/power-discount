@@ -1,10 +1,11 @@
 <?php
 /**
- * Plugin Name: Power Discount
- * Plugin URI:  https://github.com/luke/power-discount
- * Description: WooCommerce discount rules engine - Taiwan-first.
- * Version:     0.1.0
- * Author:      Luke
+ * Plugin Name: Power Discount 折扣規則外掛
+ * Plugin URI:  https://powerhouse.cloud
+ * Description: 專為台灣電商打造的 WooCommerce 折扣規則引擎。支援商品折扣、數量階梯、整車折扣、任選 N 件、買 X 送 Y、第 N 件 X 折、紅配綠（跨類組合）、條件免運、滿額贈共 9 種策略，內建 13 種觸發條件與 6 種商品篩選，並提供可視化規則編輯器、拖拉排序、每月重複排程、折扣統計報表等功能。
+ * Version:     1.0.0
+ * Author:      Powerhouse
+ * Author URI:  https://powerhouse.cloud
  * License:     GPL-2.0-or-later
  * Text Domain: power-discount
  * Domain Path: /languages
@@ -20,7 +21,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('POWER_DISCOUNT_VERSION', '0.1.0');
+define('POWER_DISCOUNT_VERSION', '1.0.0');
 define('POWER_DISCOUNT_FILE', __FILE__);
 define('POWER_DISCOUNT_DIR', plugin_dir_path(__FILE__));
 define('POWER_DISCOUNT_URL', plugin_dir_url(__FILE__));
