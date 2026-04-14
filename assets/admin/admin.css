@@ -464,18 +464,61 @@
     color: #b91c1c;
 }
 
-/* Heading bar above table */
+/* Heading bar above table — tighten gap between heading and table */
 .pd-rules-list h1.wp-heading-inline {
     font-weight: 600;
+    margin-bottom: 4px;
 }
+.pd-rules-list .wp-header-end {
+    margin: 0;
+    padding: 0;
+    border: none;
+    visibility: hidden;
+    height: 0;
+}
+.pd-rules-list form {
+    margin-top: 8px;
+}
+
+/* "Add New" pill button */
 .pd-rules-list .page-title-action {
-    background: #2271b1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #2271b1 0%, #135e96 100%);
     color: #fff;
-    border-radius: 4px;
-    padding: 6px 14px;
-    margin-left: 8px;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 20px 8px 16px;
+    margin-left: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    box-shadow: 0 2px 6px rgba(34,113,177,0.3);
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
-.pd-rules-list .page-title-action:hover {
-    background: #135e96;
+.pd-rules-list .page-title-action::before {
+    content: "+";
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+    text-align: center;
+    background: rgba(255,255,255,0.22);
+    border-radius: 50%;
+    font-size: 15px;
+    font-weight: 700;
+}
+.pd-rules-list .page-title-action:hover,
+.pd-rules-list .page-title-action:focus {
+    background: linear-gradient(135deg, #135e96 0%, #0b4167 100%);
     color: #fff;
+    box-shadow: 0 4px 12px rgba(34,113,177,0.4);
+    transform: translateY(-1px);
+    outline: none;
+}
+.pd-rules-list .page-title-action:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(34,113,177,0.3);
 }

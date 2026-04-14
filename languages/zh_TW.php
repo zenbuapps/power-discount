@@ -31,7 +31,7 @@ return [
     'Status'                                            => '狀態',
     'Priority'                                          => '優先順序',
     'Schedule'                                          => '排程',
-    'Used'                                              => '已使用',
+    'Used'                                              => '已使用次數',
     'Always'                                            => '不限',
     'Enabled'                                           => '啟用',
     'Disabled'                                          => '已停用',
