@@ -43,6 +43,11 @@ final class FreeShippingProgressHelper
             }
         }
 
+        // Design note: when at least one threshold is already achieved, we report
+        // achieved=true and stop showing progress toward higher tiers. Stores with
+        // multi-tier free shipping (e.g. standard NT$500, express NT$2000) will only
+        // see the lowest met threshold celebrated. A future enhancement could surface
+        // "remaining to next tier" once the first is met.
         if ($achieved) {
             return new FreeShippingProgress(true, true, null, null);
         }
