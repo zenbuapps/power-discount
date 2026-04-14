@@ -20,9 +20,10 @@ final class ReportsPage
             wp_die(esc_html__('Permission denied.', 'power-discount'));
         }
 
-        $stats = $this->reports->getRuleStats();
-        $totalDiscount = $this->reports->getTotalDiscount();
-        $totalOrders = $this->reports->getTotalOrdersAffected();
+        $summary = $this->reports->getSummary();
+        $stats = $summary['stats'];
+        $totalDiscount = $summary['total_discount'];
+        $totalOrders = $summary['total_orders'];
 
         $rulesUrl = admin_url('admin.php?page=power-discount');
 

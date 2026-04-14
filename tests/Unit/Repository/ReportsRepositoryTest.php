@@ -97,4 +97,23 @@ final class ReportsRepositoryTest extends TestCase
         // Title is the most recent snapshot
         self::assertSame('New Title', $stats[0]['rule_title']);
     }
+
+    public function testGetSummaryConsolidatesEverythingInOnePass(): void
+    {
+        $this->orderRepo->record(1, [
+            new DiscountResult(1, 'simple', 'product', 100.0, [], null, []),
+            new DiscountResult(2, 'cart', 'cart', 50.0, [], null, []),
+        ], [1 => 'A', 2 => 'B']);
+        $this->orderRepo->record(2, [
+            new DiscountResult(1, 'simple', 'product', 200.0, [], null, []),
+        ], [1 => 'A']);
+
+        $summary = $this->reports->getSummary();
+
+        self::assertSame(350.0, $summary['total_discount']);
+        self::assertSame(2, $summary['total_orders']);
+        self::assertCount(2, $summary['stats']);
+        self::assertSame(1, $summary['stats'][0]['rule_id']);
+        self::assertSame(300.0, $summary['stats'][0]['total_amount']);
+    }
 }
