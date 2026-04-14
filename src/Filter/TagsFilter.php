@@ -16,6 +16,9 @@ final class TagsFilter implements FilterInterface
     {
         $method = strtolower((string) ($config['method'] ?? 'in'));
         $ids = array_map('intval', (array) ($config['ids'] ?? []));
+        if ($ids === []) {
+            return false;
+        }
         $hit = $item->isInTags($ids);
         return $method === 'not_in' ? !$hit : $hit;
     }

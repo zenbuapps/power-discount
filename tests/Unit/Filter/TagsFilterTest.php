@@ -29,4 +29,10 @@ final class TagsFilterTest extends TestCase
         self::assertTrue($f->matches(['method' => 'not_in', 'ids' => [99]], $item));
         self::assertFalse($f->matches(['method' => 'not_in', 'ids' => [5]], $item));
     }
+
+    public function testEmptyIdsNotInReturnsFalse(): void
+    {
+        $f = new TagsFilter();
+        self::assertFalse($f->matches(['method' => 'not_in', 'ids' => []], new CartItem(1, 'A', 10.0, 1, [], [5])));
+    }
 }

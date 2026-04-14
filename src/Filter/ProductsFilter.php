@@ -16,6 +16,9 @@ final class ProductsFilter implements FilterInterface
     {
         $method = strtolower((string) ($config['method'] ?? 'in'));
         $ids = array_map('intval', (array) ($config['ids'] ?? []));
+        if ($ids === []) {
+            return false;
+        }
         $hit = in_array($item->getProductId(), $ids, true);
         return $method === 'not_in' ? !$hit : $hit;
     }

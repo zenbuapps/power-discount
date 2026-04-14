@@ -33,4 +33,10 @@ final class ProductsFilterTest extends TestCase
         $f = new ProductsFilter();
         self::assertFalse($f->matches(['method' => 'in', 'ids' => []], new CartItem(1, 'A', 10.0, 1, [])));
     }
+
+    public function testEmptyIdsNotInReturnsFalse(): void
+    {
+        $f = new ProductsFilter();
+        self::assertFalse($f->matches(['method' => 'not_in', 'ids' => []], new CartItem(1, 'A', 10.0, 1, [])));
+    }
 }
