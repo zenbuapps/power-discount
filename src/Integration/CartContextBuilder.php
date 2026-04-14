@@ -35,11 +35,34 @@ final class CartContextBuilder
                 $categoryIds = array_map('intval', (array) $categorySource->get_category_ids());
             }
 
+            $tagIds = [];
+            $attributes = [];
+            $onSale = false;
+            if (method_exists($categorySource, 'get_tag_ids')) {
+                $tagIds = array_map('intval', (array) $categorySource->get_tag_ids());
+            }
+            if (method_exists($categorySource, 'get_attributes')) {
+                $attrsRaw = $categorySource->get_attributes();
+                if (is_array($attrsRaw)) {
+                    foreach ($attrsRaw as $attrKey => $attrValue) {
+                        // WC attribute objects expose get_options(); variations store plain strings.
+                        if (is_object($attrValue) && method_exists($attrValue, 'get_options')) {
+                            $attributes[(string) $attrKey] = array_map('strval', (array) $attrValue->get_options());
+                        } elseif (is_string($attrValue)) {
+                            $attributes[(string) $attrKey] = [$attrValue];
+                        }
+                    }
+                }
+            }
+            if (method_exists($product, 'is_on_sale')) {
+                $onSale = (bool) $product->is_on_sale();
+            }
+
             if ($price <= 0 || $quantity <= 0) {
                 continue;
             }
 
-            $items[] = new CartItem($productId, $name, $price, $quantity, $categoryIds);
+            $items[] = new CartItem($productId, $name, $price, $quantity, $categoryIds, $tagIds, $attributes, $onSale);
         }
         return new CartContext($items);
     }

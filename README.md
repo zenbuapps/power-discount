@@ -4,16 +4,14 @@ WooCommerce discount rules engine — Taiwan-first.
 
 ## Status
 
-**Phase 3 (Taiwan Strategies)** — complete.
+**Phase 4a (Conditions + Filters + ShippingHooks)** — complete.
 
-- All 8 strategies now registered: `simple`, `bulk`, `cart`, `set`, `buy_x_get_y`, `nth_item`, `cross_category`, `free_shipping`
-- Taiwan-first features:
-  - **Buy X Get Y** (same / specific / cheapest_in_cart targets)
-  - **第 N 件 X 折** (NthItemStrategy with recursive cycles)
-  - **紅配綠** (CrossCategoryStrategy with multi-group bundles)
-  - **免運** (FreeShipping, shipping-scope sentinel — real shipping manipulation lands in Phase 4)
+- 13 conditions available: `cart_subtotal`, `cart_quantity`, `cart_line_items`, `date_range`, `day_of_week`, `time_of_day`, `user_role`, `user_logged_in`, `payment_method`, `shipping_method`, `first_order`, `total_spent`, `birthday_month`
+- 6 filters available: `all_products`, `products`, `categories`, `tags`, `attributes`, `on_sale`
+- ShippingHooks consumes `shippingResults()` to modify WC package rates in real time
+- CartContextBuilder populates tagIds, attributes, onSale from WC products
 
-Still pending: remaining 11 conditions + 4 filters (Phase 4), Admin UI (Phase 4), Frontend (Phase 4), real ShippingHooks (Phase 4).
+Still pending (Phase 4b/4c): Admin UI (React + WP_List_Table), REST API, Frontend (price table, shipping bar, saved label), Reports.
 
 ## Requirements
 
