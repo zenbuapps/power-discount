@@ -16,6 +16,15 @@ return [
 
     // === List page ===
     'Power Discount Rules'                              => '折扣規則管理',
+    '商品折扣 · Simple'                                  => '商品折扣 · Simple',
+    '數量階梯 · Bulk'                                    => '數量階梯 · Bulk',
+    '整車折扣 · Cart'                                    => '整車折扣 · Cart',
+    '任選 N 件 · Set'                                    => '任選 N 件 · Set',
+    '買 X 送 Y · Buy X Get Y'                            => '買 X 送 Y · Buy X Get Y',
+    '第 N 件 X 折 · Nth item'                            => '第 N 件 X 折 · Nth item',
+    '紅配綠 · Cross-category'                            => '紅配綠 · Cross-category',
+    '條件免運 · Free shipping'                           => '條件免運 · Free shipping',
+    '滿額贈 · Gift with purchase'                        => '滿額贈 · Gift with purchase',
     'Add New'                                           => '新增規則',
     'Title'                                             => '名稱',
     'Type'                                              => '類型',
@@ -27,6 +36,10 @@ return [
     'Enabled'                                           => '啟用',
     'Disabled'                                          => '已停用',
     'Toggle'                                            => '切換',
+    'Click to enable'                                   => '點擊啟用',
+    'Click to disable'                                  => '點擊停用',
+    'Lower number = higher priority. Rules run in priority ascending order.'
+        => '數字越小，優先序越高。規則會依優先序由小到大依序執行。',
     'Edit'                                              => '編輯',
     'Duplicate'                                         => '複製',
     'Delete'                                            => '刪除',

@@ -5,7 +5,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 ?>
-<div class="wrap">
+<div class="wrap pd-rules-list">
     <h1 class="wp-heading-inline"><?php esc_html_e('Power Discount Rules', 'power-discount'); ?></h1>
     <a href="<?php echo esc_url($newUrl); ?>" class="page-title-action"><?php esc_html_e('Add New', 'power-discount'); ?></a>
     <hr class="wp-header-end">

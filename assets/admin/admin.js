@@ -1,19 +1,18 @@
 (function ($) {
     'use strict';
 
-    // --- Status toggle (existing) ---
-    $(document).on('click', '.pd-toggle-status', function (e) {
-        e.preventDefault();
-        var $link = $(this);
-        if ($link.hasClass('pd-disabled')) {
+    // --- Status toggle switch on rule list ---
+    $(document).on('change', '.pd-toggle-status-input', function () {
+        var $checkbox = $(this);
+        if ($checkbox.prop('disabled')) {
             return;
         }
-        var id = $link.data('id');
-        var nonce = $link.data('nonce');
+        var id = $checkbox.data('id');
+        var nonce = $checkbox.data('nonce');
         if (!id) {
             return;
         }
-        $link.addClass('pd-disabled').css('opacity', 0.5);
+        $checkbox.prop('disabled', true);
         $.post(PowerDiscountAdmin.ajaxUrl, {
             action: 'pd_toggle_rule_status',
             id: id,
@@ -21,7 +20,7 @@
         }).done(function () {
             window.location.reload();
         }).fail(function (xhr) {
-            $link.removeClass('pd-disabled').css('opacity', 1);
+            $checkbox.prop('disabled', false).prop('checked', !$checkbox.prop('checked'));
             var msg = (xhr.responseJSON && xhr.responseJSON.data && xhr.responseJSON.data.message) || 'Toggle failed';
             window.alert(msg);
         });

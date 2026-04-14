@@ -24,13 +24,34 @@ final class RulesListTable extends \WP_List_Table
         $this->rules = $rules;
     }
 
+    /**
+     * Bilingual labels for each strategy type.
+     *
+     * @return array<string, string>
+     */
+    public static function typeLabels(): array
+    {
+        return [
+            'simple'             => __('商品折扣 · Simple', 'power-discount'),
+            'bulk'               => __('數量階梯 · Bulk', 'power-discount'),
+            'cart'               => __('整車折扣 · Cart', 'power-discount'),
+            'set'                => __('任選 N 件 · Set', 'power-discount'),
+            'buy_x_get_y'        => __('買 X 送 Y · Buy X Get Y', 'power-discount'),
+            'nth_item'           => __('第 N 件 X 折 · Nth item', 'power-discount'),
+            'cross_category'     => __('紅配綠 · Cross-category', 'power-discount'),
+            'free_shipping'     => __('條件免運 · Free shipping', 'power-discount'),
+            'gift_with_purchase' => __('滿額贈 · Gift with purchase', 'power-discount'),
+        ];
+    }
+
     public function get_columns(): array
     {
         return [
+            'status'     => __('Status', 'power-discount'),
             'title'      => __('Title', 'power-discount'),
             'type'       => __('Type', 'power-discount'),
-            'status'     => __('Status', 'power-discount'),
-            'priority'   => __('Priority', 'power-discount'),
+            'priority'   => __('Priority', 'power-discount') . ' <span class="pd-help-tip" title="' .
+                esc_attr__('Lower number = higher priority. Rules run in priority ascending order.', 'power-discount') . '">?</span>',
             'schedule'   => __('Schedule', 'power-discount'),
             'used_count' => __('Used', 'power-discount'),
         ];
@@ -39,7 +60,6 @@ final class RulesListTable extends \WP_List_Table
     public function prepare_items(): void
     {
         $this->_column_headers = [$this->get_columns(), [], []];
-        // Phase 4b: show ALL rules (no pagination, status filter), sorted by priority.
         $rules = $this->rules->findAll();
         $allRows = [];
         foreach ($rules as $rule) {
@@ -63,6 +83,23 @@ final class RulesListTable extends \WP_List_Table
             'ends_at'    => $rule->getEndsAt(),
             'used_count' => $rule->getUsedCount(),
         ];
+    }
+
+    /** @param array<string, mixed> $item */
+    public function column_status($item): string
+    {
+        $enabled = (int) $item['status'] === 1;
+        $toggleNonce = wp_create_nonce('power_discount_admin');
+        return sprintf(
+            '<label class="pd-toggle-switch" title="%s">'
+            . '<input type="checkbox" class="pd-toggle-status-input" data-id="%d" data-nonce="%s"%s>'
+            . '<span class="pd-toggle-slider"></span>'
+            . '</label>',
+            esc_attr($enabled ? __('Click to disable', 'power-discount') : __('Click to enable', 'power-discount')),
+            (int) $item['id'],
+            esc_attr($toggleNonce),
+            $enabled ? ' checked' : ''
+        );
     }
 
     /**
@@ -107,30 +144,16 @@ final class RulesListTable extends \WP_List_Table
     /** @param array<string, mixed> $item */
     public function column_type($item): string
     {
-        return esc_html((string) $item['type']);
-    }
-
-    /** @param array<string, mixed> $item */
-    public function column_status($item): string
-    {
-        $enabled = (int) $item['status'] === 1;
-        $label = $enabled
-            ? '<span style="color:#46b450">' . esc_html__('Enabled', 'power-discount') . '</span>'
-            : '<span style="color:#dc3232">' . esc_html__('Disabled', 'power-discount') . '</span>';
-        $toggleNonce = wp_create_nonce('power_discount_admin');
-        return sprintf(
-            '%s &nbsp;<a href="#" class="pd-toggle-status" data-id="%d" data-nonce="%s">%s</a>',
-            $label,
-            (int) $item['id'],
-            esc_attr($toggleNonce),
-            esc_html__('Toggle', 'power-discount')
-        );
+        $type = (string) $item['type'];
+        $labels = self::typeLabels();
+        $label = $labels[$type] ?? $type;
+        return '<span class="pd-type-badge pd-type-' . esc_attr($type) . '">' . esc_html($label) . '</span>';
     }
 
     /** @param array<string, mixed> $item */
     public function column_priority($item): string
     {
-        return (string) (int) $item['priority'];
+        return '<span class="pd-priority-pill">' . (int) $item['priority'] . '</span>';
     }
 
     /** @param array<string, mixed> $item */
@@ -139,14 +162,18 @@ final class RulesListTable extends \WP_List_Table
         $start = (string) ($item['starts_at'] ?? '');
         $end = (string) ($item['ends_at'] ?? '');
         if ($start === '' && $end === '') {
-            return '<span style="color:#999">' . esc_html__('Always', 'power-discount') . '</span>';
+            return '<span class="pd-muted">' . esc_html__('Always', 'power-discount') . '</span>';
         }
-        return esc_html(($start ?: '...') . ' → ' . ($end ?: '...'));
+        return '<span class="pd-schedule">' . esc_html(($start ?: '…') . ' → ' . ($end ?: '…')) . '</span>';
     }
 
     /** @param array<string, mixed> $item */
     public function column_used_count($item): string
     {
-        return (string) (int) $item['used_count'];
+        $count = (int) $item['used_count'];
+        if ($count === 0) {
+            return '<span class="pd-muted">0</span>';
+        }
+        return '<strong>' . $count . '</strong>';
     }
 }

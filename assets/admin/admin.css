@@ -94,3 +94,156 @@
 /* === Strategy section internal table tighter than top-level == */
 .pd-strategy-section .form-table { margin-top: 0; }
 .pd-strategy-section .form-table th { width: 220px; }
+
+/* ============================================================
+   Rules list page — beautified
+   ============================================================ */
+
+/* Wider, breathier table */
+.wp-list-table.rules,
+.wp-list-table.widefat.rules {
+    border: 1px solid #dcdcde;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.wp-list-table.rules thead th,
+.wp-list-table.rules tfoot th {
+    background: #f6f7f7;
+    color: #1d2327;
+    font-weight: 600;
+    font-size: 13px;
+    border-bottom: 2px solid #dcdcde;
+}
+.wp-list-table.rules tbody td {
+    padding: 14px 12px;
+    vertical-align: middle;
+}
+.wp-list-table.rules tbody tr:hover {
+    background: #f8fafc;
+}
+
+/* Status column — narrow */
+.wp-list-table.rules .column-status {
+    width: 80px;
+    text-align: center;
+}
+
+/* Toggle switch */
+.pd-toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+.pd-toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.pd-toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #cbd5e1;
+    border-radius: 999px;
+    transition: background 0.2s ease;
+}
+.pd-toggle-slider::before {
+    content: "";
+    position: absolute;
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+}
+.pd-toggle-switch input:checked + .pd-toggle-slider {
+    background: #16a34a;
+}
+.pd-toggle-switch input:checked + .pd-toggle-slider::before {
+    transform: translateX(20px);
+}
+.pd-toggle-switch input:disabled + .pd-toggle-slider {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Type badge */
+.pd-type-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: #eef2ff;
+    color: #4338ca;
+    border: 1px solid #c7d2fe;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+.pd-type-badge.pd-type-simple         { background:#eef2ff; color:#4338ca; border-color:#c7d2fe; }
+.pd-type-badge.pd-type-bulk           { background:#ecfeff; color:#0e7490; border-color:#a5f3fc; }
+.pd-type-badge.pd-type-cart           { background:#f0fdf4; color:#15803d; border-color:#bbf7d0; }
+.pd-type-badge.pd-type-set            { background:#fdf4ff; color:#a21caf; border-color:#f5d0fe; }
+.pd-type-badge.pd-type-buy_x_get_y    { background:#fff7ed; color:#c2410c; border-color:#fed7aa; }
+.pd-type-badge.pd-type-nth_item       { background:#fef3c7; color:#a16207; border-color:#fde68a; }
+.pd-type-badge.pd-type-cross_category { background:#fef2f2; color:#b91c1c; border-color:#fecaca; }
+.pd-type-badge.pd-type-free_shipping  { background:#eff6ff; color:#1d4ed8; border-color:#bfdbfe; }
+.pd-type-badge.pd-type-gift_with_purchase { background:#fff7ed; color:#9a3412; border-color:#fed7aa; }
+
+/* Priority pill */
+.pd-priority-pill {
+    display: inline-block;
+    min-width: 32px;
+    padding: 3px 10px;
+    background: #f1f5f9;
+    color: #334155;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-weight: 600;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Help tip */
+.pd-help-tip {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    line-height: 14px;
+    text-align: center;
+    background: #cbd5e1;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: bold;
+    cursor: help;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+.pd-help-tip:hover { background: #94a3b8; }
+
+/* Schedule + muted */
+.pd-muted { color: #94a3b8; }
+.pd-schedule { color: #475569; font-size: 12px; font-variant-numeric: tabular-nums; }
+
+/* Heading bar above table */
+.pd-rules-list h1.wp-heading-inline {
+    font-weight: 600;
+}
+.pd-rules-list .page-title-action {
+    background: #2271b1;
+    color: #fff;
+    border-radius: 4px;
+    padding: 6px 14px;
+    margin-left: 8px;
+}
+.pd-rules-list .page-title-action:hover {
+    background: #135e96;
+    color: #fff;
+}
