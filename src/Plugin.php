@@ -18,6 +18,11 @@ use PowerDiscount\Condition\TimeOfDayCondition;
 use PowerDiscount\Condition\TotalSpentCondition;
 use PowerDiscount\Condition\UserLoggedInCondition;
 use PowerDiscount\Condition\UserRoleCondition;
+use PowerDiscount\Admin\AdminMenu;
+use PowerDiscount\Admin\AjaxController;
+use PowerDiscount\Admin\Notices;
+use PowerDiscount\Admin\RuleEditPage;
+use PowerDiscount\Admin\RulesListPage;
 use PowerDiscount\Engine\Aggregator;
 use PowerDiscount\Engine\Calculator;
 use PowerDiscount\Engine\ExclusivityResolver;
@@ -96,6 +101,14 @@ final class Plugin
         $cartHooks->register();
         (new OrderDiscountLogger($rulesRepo, $orderDiscountsRepo, $cartHooks))->register();
         (new ShippingHooks($rulesRepo, $calculator, $aggregator, $builder, $cartHooks))->register();
+
+        if (is_admin()) {
+            $listPage = new RulesListPage($rulesRepo);
+            $editPage = new RuleEditPage($rulesRepo);
+            (new AdminMenu($rulesRepo, $listPage, $editPage))->register();
+            (new AjaxController($rulesRepo))->register();
+            (new Notices())->register();
+        }
     }
 
     private function buildStrategyRegistry(): StrategyRegistry

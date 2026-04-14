@@ -4,14 +4,15 @@ WooCommerce discount rules engine — Taiwan-first.
 
 ## Status
 
-**Phase 4a (Conditions + Filters + ShippingHooks)** — complete.
+**Phase 4b (PHP Admin UI)** — complete.
 
-- 13 conditions available: `cart_subtotal`, `cart_quantity`, `cart_line_items`, `date_range`, `day_of_week`, `time_of_day`, `user_role`, `user_logged_in`, `payment_method`, `shipping_method`, `first_order`, `total_spent`, `birthday_month`
-- 6 filters available: `all_products`, `products`, `categories`, `tags`, `attributes`, `on_sale`
-- ShippingHooks consumes `shippingResults()` to modify WC package rates in real time
-- CartContextBuilder populates tagIds, attributes, onSale from WC products
+- Admin menu under `WooCommerce → Power Discount`
+- Rule list page (WP_List_Table): edit / duplicate / delete / AJAX status toggle
+- Rule edit page (PHP form): title, type, status, priority, exclusive, schedule, usage limit, label, notes + JSON textareas for `config`, `filters`, `conditions`
+- `RuleFormMapper` validates JSON and field requirements (unit-tested)
+- Admin notices via transient queue
 
-Still pending (Phase 4b/4c): Admin UI (React + WP_List_Table), REST API, Frontend (price table, shipping bar, saved label), Reports.
+Pending: React rule builder (Phase 4d, optional), Frontend price table / shipping bar / saved label (Phase 4c), Reports page (Phase 4c).
 
 ## Requirements
 
