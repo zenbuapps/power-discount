@@ -13,6 +13,11 @@ final class CartContextBuilder
     {
         $items = [];
         foreach ($cart->get_cart() as $cartItem) {
+            // Skip addon items that the rule explicitly excluded from the discount engine.
+            // Set by AddonCartHandler when the matching AddonRule has exclude_from_discounts = true.
+            if (!empty($cartItem['_pd_addon_excluded_from_discounts'])) {
+                continue;
+            }
             $product = $cartItem['data'] ?? null;
             if ($product === null || !is_object($product) || !method_exists($product, 'get_id')) {
                 continue;
