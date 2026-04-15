@@ -80,4 +80,32 @@ final class AddonRuleTest extends TestCase
         $rule = $this->makeRule(['status' => 0]);
         self::assertFalse($rule->isEnabled());
     }
+
+    public function testConstructorSkipsMalformedAddonItems(): void
+    {
+        $rule = new AddonRule([
+            'title' => 't',
+            'addon_items' => [
+                ['product_id' => 0, 'special_price' => 10],    // invalid: product_id must be > 0
+                'not-an-array',                                  // invalid: not array
+                ['product_id' => 5, 'special_price' => 20],    // valid
+                ['product_id' => 10, 'special_price' => -1],   // invalid: negative price
+                ['product_id' => 11, 'special_price' => 50],   // valid
+            ],
+        ]);
+        $items = $rule->getAddonItems();
+        self::assertCount(2, $items);
+        self::assertSame(5, $items[0]->getProductId());
+        self::assertSame(11, $items[1]->getProductId());
+    }
+
+    public function testConstructorFiltersTargetProductIds(): void
+    {
+        $rule = new AddonRule([
+            'title' => 't',
+            'addon_items' => [],
+            'target_product_ids' => [0, -1, 'abc', 7, 12, null],
+        ]);
+        self::assertSame([7, 12], $rule->getTargetProductIds());
+    }
 }

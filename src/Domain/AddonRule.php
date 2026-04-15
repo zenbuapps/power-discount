@@ -19,7 +19,7 @@ final class AddonRule
     {
         $this->id       = (int) ($data['id'] ?? 0);
         $this->title    = (string) ($data['title'] ?? '');
-        $this->status   = (int) ($data['status'] ?? 1);
+        $this->status   = (int) ($data['status'] ?? RuleStatus::ENABLED);
         $this->priority = (int) ($data['priority'] ?? 10);
 
         $this->addonItems = [];
@@ -44,7 +44,7 @@ final class AddonRule
     public function getTitle(): string             { return $this->title; }
     public function getStatus(): int               { return $this->status; }
     public function getPriority(): int             { return $this->priority; }
-    public function isEnabled(): bool              { return $this->status === 1; }
+    public function isEnabled(): bool              { return $this->status === RuleStatus::ENABLED; }
     public function isExcludeFromDiscounts(): bool { return $this->excludeFromDiscounts; }
 
     /** @return AddonItem[] */
