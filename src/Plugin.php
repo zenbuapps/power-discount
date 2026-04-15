@@ -48,6 +48,7 @@ use PowerDiscount\Filter\OnSaleFilter;
 use PowerDiscount\Filter\ProductsFilter;
 use PowerDiscount\Filter\TagsFilter;
 use PowerDiscount\I18n\Loader as I18nLoader;
+use PowerDiscount\Integration\AddonCartHandler;
 use PowerDiscount\Integration\AddonFrontend;
 use PowerDiscount\Integration\AppliedRulesDisplay;
 use PowerDiscount\Integration\CartContextBuilder;
@@ -138,6 +139,7 @@ final class Plugin
         (new GiftProgressBar($rulesRepo, $builder, $giftProgressHelper))->register();
         (new PriceTableShortcode($rulesRepo))->register();
         (new AddonFrontend($addonRulesRepo))->register();
+        (new AddonCartHandler($addonRulesRepo))->register();
 
         if (is_admin()) {
             $listPage = new RulesListPage($rulesRepo);
