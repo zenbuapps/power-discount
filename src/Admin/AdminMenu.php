@@ -11,13 +11,15 @@ final class AdminMenu
     private RulesListPage $listPage;
     private RuleEditPage $editPage;
     private ReportsPage $reportsPage;
+    private AddonMenu $addonMenu;
 
-    public function __construct(RuleRepository $rules, RulesListPage $listPage, RuleEditPage $editPage, ReportsPage $reportsPage)
+    public function __construct(RuleRepository $rules, RulesListPage $listPage, RuleEditPage $editPage, ReportsPage $reportsPage, AddonMenu $addonMenu)
     {
         $this->rules = $rules;
         $this->listPage = $listPage;
         $this->editPage = $editPage;
         $this->reportsPage = $reportsPage;
+        $this->addonMenu = $addonMenu;
     }
 
     public function register(): void
@@ -56,6 +58,14 @@ final class AdminMenu
             'manage_woocommerce',
             'power-discount-reports',
             [$this->reportsPage, 'render']
+        );
+        add_submenu_page(
+            'power-discount',
+            __('加價購', 'power-discount'),
+            __('加價購', 'power-discount'),
+            'manage_woocommerce',
+            'power-discount-addons',
+            [$this->addonMenu, 'route']
         );
     }
 

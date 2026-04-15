@@ -18,6 +18,10 @@ use PowerDiscount\Condition\TimeOfDayCondition;
 use PowerDiscount\Condition\TotalSpentCondition;
 use PowerDiscount\Condition\UserLoggedInCondition;
 use PowerDiscount\Condition\UserRoleCondition;
+use PowerDiscount\Admin\AddonActivationPage;
+use PowerDiscount\Admin\AddonMenu;
+use PowerDiscount\Admin\AddonRuleEditPage;
+use PowerDiscount\Admin\AddonRulesListPage;
 use PowerDiscount\Admin\AdminMenu;
 use PowerDiscount\Admin\AjaxController;
 use PowerDiscount\Admin\Notices;
@@ -49,6 +53,7 @@ use PowerDiscount\Integration\GiftAutoInjector;
 use PowerDiscount\Integration\OrderDiscountLogger;
 use PowerDiscount\Integration\ShippingHooks;
 use PowerDiscount\Persistence\WpdbAdapter;
+use PowerDiscount\Repository\AddonRuleRepository;
 use PowerDiscount\Repository\OrderDiscountRepository;
 use PowerDiscount\Repository\RuleRepository;
 use PowerDiscount\Strategy\BulkStrategy;
@@ -133,9 +138,17 @@ final class Plugin
             $listPage = new RulesListPage($rulesRepo);
             $editPage = new RuleEditPage($rulesRepo);
             $reportsPage = new ReportsPage(new ReportsRepository($db));
-            (new AdminMenu($rulesRepo, $listPage, $editPage, $reportsPage))->register();
+
+            $addonRulesRepo   = new AddonRuleRepository($db);
+            $addonActivation  = new AddonActivationPage();
+            $addonListPage    = new AddonRulesListPage($addonRulesRepo);
+            $addonEditPage    = new AddonRuleEditPage($addonRulesRepo);
+            $addonMenu        = new AddonMenu($addonRulesRepo, $addonActivation, $addonListPage, $addonEditPage);
+
+            (new AdminMenu($rulesRepo, $listPage, $editPage, $reportsPage, $addonMenu))->register();
             (new AjaxController($rulesRepo))->register();
             (new Notices())->register();
+            $addonMenu->register();
         }
     }
 

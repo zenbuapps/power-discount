@@ -475,3 +475,27 @@
     margin-top: 8px;
 }
 
+
+/* === 加價購 activation card === */
+.pd-activation-card {
+    max-width: 640px;
+    margin: 40px auto;
+    padding: 48px 56px;
+    background: #fff;
+    border: 1px solid #dcdcde;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    text-align: center;
+}
+.pd-activation-icon { font-size: 56px; line-height: 1; margin-bottom: 16px; }
+.pd-activation-lede { color: #6b7280; font-size: 15px; max-width: 440px; margin: 12px auto 24px; }
+.pd-activation-features {
+    text-align: left;
+    display: inline-block;
+    color: #374151;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 32px;
+    font-size: 14px;
+    line-height: 2;
+}
