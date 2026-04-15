@@ -23,6 +23,7 @@ final class AddonCartHandler
         add_action('woocommerce_add_to_cart', [$this, 'onAddToCart'], 10, 6);
         add_action('woocommerce_before_calculate_totals', [$this, 'applySpecialPrices'], 5);
         add_filter('woocommerce_get_item_data', [$this, 'renderCartItemMeta'], 10, 2);
+        add_filter('woocommerce_cart_item_quantity', [$this, 'lockAddonQuantity'], 10, 3);
     }
 
     /**
@@ -126,5 +127,24 @@ final class AddonCartHandler
             'display' => '',
         ];
         return $itemData;
+    }
+
+    /**
+     * In the cart page, replace the quantity input for addon items with
+     * a fixed "1" display. Addon items are always purchased as a single
+     * unit tied to a target product; letting customers multiply the
+     * quantity would break the rule's intent.
+     *
+     * @param string $html
+     * @param string $cartItemKey
+     * @param array  $cartItem
+     * @return string
+     */
+    public function lockAddonQuantity(string $html, string $cartItemKey, array $cartItem): string
+    {
+        if (isset($cartItem['_pd_addon_from'])) {
+            return '<span class="pd-addon-fixed-qty">1</span>';
+        }
+        return $html;
     }
 }
