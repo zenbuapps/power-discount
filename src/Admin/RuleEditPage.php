@@ -10,6 +10,8 @@ use PowerDiscount\Repository\RuleRepository;
 final class RuleEditPage
 {
     private RuleRepository $rules;
+    private ?Rule $pendingRule = null;
+    private string $pendingError = '';
 
     public function __construct(RuleRepository $rules)
     {
@@ -22,8 +24,11 @@ final class RuleEditPage
             wp_die(esc_html__('Permission denied.', 'power-discount'));
         }
 
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-        $rule = $id > 0 ? $this->rules->findById($id) : null;
+        $rule = $this->pendingRule;
+        if ($rule === null) {
+            $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+            $rule = $id > 0 ? $this->rules->findById($id) : null;
+        }
 
         if ($rule === null) {
             $rule = new Rule([
@@ -34,6 +39,8 @@ final class RuleEditPage
                 'config'   => ['method' => 'percentage', 'value' => 10],
             ]);
         }
+
+        $pendingError = $this->pendingError;
 
         $isNew = $rule->getId() === 0;
         $strategyTypes = [
@@ -94,15 +101,11 @@ final class RuleEditPage
         try {
             $rule = RuleFormMapper::fromFormData($post);
         } catch (InvalidArgumentException $e) {
-            Notices::add($e->getMessage(), 'error');
-            $redirectId = (int) ($post['id'] ?? 0);
-            $redirectAction = $redirectId > 0 ? 'edit' : 'new';
-            $args = ['page' => 'power-discount', 'action' => $redirectAction];
-            if ($redirectId > 0) {
-                $args['id'] = $redirectId;
-            }
-            wp_safe_redirect(add_query_arg($args, admin_url('admin.php')));
-            exit;
+            // Re-render the form with the user's input preserved + an inline error.
+            $this->pendingRule = RuleFormMapper::fromFormDataLoose($post);
+            $this->pendingError = $e->getMessage();
+            $this->render();
+            return;
         }
 
         if ($rule->getId() > 0) {

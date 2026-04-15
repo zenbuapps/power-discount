@@ -3,6 +3,7 @@
  * @var \PowerDiscount\Domain\Rule $rule
  * @var bool $isNew
  * @var array<string, string> $strategyTypes
+ * @var string $pendingError
  */
 if (!defined('ABSPATH')) {
     exit;
@@ -12,11 +13,16 @@ $pageTitle = $isNew ? __('Add Rule', 'power-discount') : __('Edit Rule', 'power-
 $listUrl = admin_url('admin.php?page=power-discount');
 $currentType = $rule->getType() ?: 'simple';
 $partialsDir = POWER_DISCOUNT_DIR . 'src/Admin/views/partials/';
+$pendingError = $pendingError ?? '';
 ?>
 <div class="wrap pd-rule-editor">
     <h1 class="wp-heading-inline"><?php echo esc_html($pageTitle); ?></h1>
     <a href="<?php echo esc_url($listUrl); ?>" class="page-title-action">← <?php esc_html_e('Back to list', 'power-discount'); ?></a>
     <hr class="wp-header-end">
+
+    <?php if ($pendingError !== ''): ?>
+        <div class="notice notice-error pd-inline-error"><p><strong><?php esc_html_e('儲存失敗：', 'power-discount'); ?></strong> <?php echo esc_html($pendingError); ?></p></div>
+    <?php endif; ?>
 
     <form method="post" action="<?php echo esc_url(admin_url('admin-post.php')); ?>" id="pd-rule-form">
         <input type="hidden" name="action" value="pd_save_rule">

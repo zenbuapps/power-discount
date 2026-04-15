@@ -6,7 +6,7 @@ Tags: woocommerce, discount, sale, promotion, taiwan
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,10 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 目前 Reports 頁面可依日期區間查詢統計。未來版本會加上 CSV 匯出功能。
 
 == Changelog ==
+
+= 1.0.1 =
+* 修正新增規則時若欄位驗證失敗會遺失使用者輸入的問題，改為在原頁面直接顯示錯誤並保留所有已填內容
+* 所有驗證錯誤訊息全面中文化（原本是英文）
 
 = 1.0.0 =
 * 首次公開發佈

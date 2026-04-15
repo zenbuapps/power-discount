@@ -16,38 +16,63 @@ final class RuleFormMapper
     ];
 
     /**
-     * Build a Rule from form POST data.
+     * Build a Rule from form POST data and fully validate it.
      *
      * @param array<string, mixed> $post
      */
     public static function fromFormData(array $post): Rule
     {
+        return self::build($post, true);
+    }
+
+    /**
+     * Build a Rule from form POST data without validation. Used to repopulate
+     * the edit form after a validation error so the user doesn't lose their
+     * input.
+     *
+     * @param array<string, mixed> $post
+     */
+    public static function fromFormDataLoose(array $post): Rule
+    {
+        return self::build($post, false);
+    }
+
+    /**
+     * @param array<string, mixed> $post
+     */
+    private static function build(array $post, bool $validate): Rule
+    {
         $title = trim((string) ($post['title'] ?? ''));
-        if ($title === '') {
-            throw new InvalidArgumentException('Rule title is required.');
+        if ($validate && $title === '') {
+            throw new InvalidArgumentException(__('請輸入規則名稱。', 'power-discount'));
         }
 
-        $type = (string) ($post['type'] ?? '');
+        $type = (string) ($post['type'] ?? 'simple');
+        if ($validate && !in_array($type, self::VALID_TYPES, true)) {
+            throw new InvalidArgumentException(sprintf(__('折扣類型無效：%s', 'power-discount'), $type));
+        }
         if (!in_array($type, self::VALID_TYPES, true)) {
-            throw new InvalidArgumentException(sprintf('Invalid rule type: %s', $type));
+            $type = 'simple';
         }
 
         $configByType = (array) ($post['config_by_type'] ?? []);
         $config = isset($configByType[$type]) && is_array($configByType[$type])
             ? self::normaliseConfig($type, $configByType[$type])
             : [];
-        self::validateConfig($type, $config);
+        if ($validate) {
+            self::validateConfig($type, $config);
+        }
 
         $filters = self::normaliseFilters((array) ($post['filters'] ?? []));
         $conditions = self::normaliseConditions((array) ($post['conditions'] ?? []));
 
         $startsAt = trim((string) ($post['starts_at'] ?? ''));
         $endsAt = trim((string) ($post['ends_at'] ?? ''));
-        if ($startsAt !== '' && !self::isValidDateString($startsAt)) {
-            throw new InvalidArgumentException('Invalid starts_at format. Expected YYYY-MM-DD HH:MM:SS.');
+        if ($validate && $startsAt !== '' && !self::isValidDateString($startsAt)) {
+            throw new InvalidArgumentException(__('開始時間格式錯誤，請使用 YYYY-MM-DD HH:MM:SS。', 'power-discount'));
         }
-        if ($endsAt !== '' && !self::isValidDateString($endsAt)) {
-            throw new InvalidArgumentException('Invalid ends_at format. Expected YYYY-MM-DD HH:MM:SS.');
+        if ($validate && $endsAt !== '' && !self::isValidDateString($endsAt)) {
+            throw new InvalidArgumentException(__('結束時間格式錯誤，請使用 YYYY-MM-DD HH:MM:SS。', 'power-discount'));
         }
 
         $usageLimitRaw = trim((string) ($post['usage_limit'] ?? ''));
@@ -218,65 +243,71 @@ final class RuleFormMapper
                 if (!in_array($config['method'] ?? '', $type === 'simple'
                         ? ['percentage', 'flat', 'fixed_price']
                         : ['percentage', 'flat_total', 'flat_per_item'], true)) {
-                    throw new InvalidArgumentException(sprintf('Invalid %s method', $type));
+                    throw new InvalidArgumentException(__('請選擇折扣方式。', 'power-discount'));
                 }
                 if (($config['value'] ?? 0) <= 0) {
-                    throw new InvalidArgumentException(sprintf('%s value must be > 0', $type));
+                    throw new InvalidArgumentException(__('折扣的數值必須大於 0。', 'power-discount'));
                 }
                 return;
             case 'bulk':
                 if (empty($config['ranges'])) {
-                    throw new InvalidArgumentException('Bulk rule needs at least one range.');
+                    throw new InvalidArgumentException(__('數量階梯折扣至少需要一個級別。', 'power-discount'));
                 }
                 foreach ($config['ranges'] as $i => $r) {
                     if (($r['from'] ?? 0) < 1) {
-                        throw new InvalidArgumentException(sprintf('Bulk range #%d needs from ≥ 1', $i + 1));
+                        throw new InvalidArgumentException(sprintf(
+                            __('第 %d 個級別的起始數量必須 ≥ 1。', 'power-discount'),
+                            $i + 1
+                        ));
                     }
                     if (($r['value'] ?? 0) <= 0) {
-                        throw new InvalidArgumentException(sprintf('Bulk range #%d needs value > 0', $i + 1));
+                        throw new InvalidArgumentException(sprintf(
+                            __('第 %d 個級別的折扣值必須 > 0。', 'power-discount'),
+                            $i + 1
+                        ));
                     }
                 }
                 return;
             case 'set':
                 if (($config['bundle_size'] ?? 0) < 2) {
-                    throw new InvalidArgumentException('Set rule bundle_size must be ≥ 2.');
+                    throw new InvalidArgumentException(__('任選 N 件的組合件數必須 ≥ 2。', 'power-discount'));
                 }
                 if (!in_array($config['method'] ?? '', ['set_price', 'set_percentage', 'set_flat_off'], true)) {
-                    throw new InvalidArgumentException('Invalid set method');
+                    throw new InvalidArgumentException(__('請選擇任選 N 件的折扣方式。', 'power-discount'));
                 }
                 if (($config['value'] ?? -1) < 0) {
-                    throw new InvalidArgumentException('Set value must be ≥ 0');
+                    throw new InvalidArgumentException(__('任選 N 件的數值必須 ≥ 0。', 'power-discount'));
                 }
                 return;
             case 'buy_x_get_y':
                 if (($config['trigger']['qty'] ?? 0) < 1) {
-                    throw new InvalidArgumentException('BuyXGetY trigger qty must be ≥ 1');
+                    throw new InvalidArgumentException(__('買 X 送 Y 的觸發數量必須 ≥ 1。', 'power-discount'));
                 }
                 if (($config['reward']['qty'] ?? 0) < 1) {
-                    throw new InvalidArgumentException('BuyXGetY reward qty must be ≥ 1');
+                    throw new InvalidArgumentException(__('買 X 送 Y 的贈品數量必須 ≥ 1。', 'power-discount'));
                 }
                 return;
             case 'nth_item':
                 if (empty($config['tiers'])) {
-                    throw new InvalidArgumentException('Nth item rule needs at least one tier.');
+                    throw new InvalidArgumentException(__('第 N 件 X 折至少需要一個級別設定。', 'power-discount'));
                 }
                 return;
             case 'cross_category':
                 if (count($config['groups'] ?? []) < 2) {
-                    throw new InvalidArgumentException('Cross category needs ≥ 2 groups.');
+                    throw new InvalidArgumentException(__('紅配綠至少需要 2 個分類群組。', 'power-discount'));
                 }
                 return;
             case 'free_shipping':
                 if (!in_array($config['method'] ?? '', ['remove_shipping', 'percentage_off_shipping', 'flat_off_shipping'], true)) {
-                    throw new InvalidArgumentException('Invalid free_shipping method');
+                    throw new InvalidArgumentException(__('請選擇免運的方式。', 'power-discount'));
                 }
                 return;
             case 'gift_with_purchase':
                 if (($config['threshold'] ?? 0) <= 0) {
-                    throw new InvalidArgumentException('Gift with purchase needs a threshold > 0.');
+                    throw new InvalidArgumentException(__('滿額贈的門檻金額必須 > 0。', 'power-discount'));
                 }
                 if (empty($config['gift_product_ids'])) {
-                    throw new InvalidArgumentException('Gift with purchase needs at least one gift product.');
+                    throw new InvalidArgumentException(__('滿額贈至少需要指定一個贈品商品。', 'power-discount'));
                 }
                 return;
         }

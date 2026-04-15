@@ -122,7 +122,7 @@ final class RuleFormMapperTest extends TestCase
     public function testRejectsMissingTitle(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches('/title/i');
+        $this->expectExceptionMessageMatches('/規則名稱/u');
         RuleFormMapper::fromFormData([
             'title' => '', 'type' => 'simple',
             'config_by_type' => ['simple' => ['method' => 'percentage', 'value' => 10]],
@@ -132,14 +132,14 @@ final class RuleFormMapperTest extends TestCase
     public function testRejectsInvalidType(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches('/type/i');
+        $this->expectExceptionMessageMatches('/折扣類型/u');
         RuleFormMapper::fromFormData(['title' => 'X', 'type' => 'bogus']);
     }
 
     public function testRejectsSimpleWithoutMethod(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches('/method/i');
+        $this->expectExceptionMessageMatches('/折扣方式/u');
         RuleFormMapper::fromFormData([
             'title' => 'X', 'type' => 'simple',
             'config_by_type' => ['simple' => ['value' => 10]],
@@ -158,7 +158,7 @@ final class RuleFormMapperTest extends TestCase
     public function testRejectsBulkWithNoRanges(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches('/range/i');
+        $this->expectExceptionMessageMatches('/級別/u');
         RuleFormMapper::fromFormData([
             'title' => 'X', 'type' => 'bulk',
             'config_by_type' => ['bulk' => ['count_scope' => 'cumulative', 'ranges' => []]],
@@ -191,7 +191,7 @@ final class RuleFormMapperTest extends TestCase
     public function testRejectsBadDateFormat(): void
     {
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessageMatches('/starts_at/i');
+        $this->expectExceptionMessageMatches('/開始時間/u');
         RuleFormMapper::fromFormData([
             'title' => 'X', 'type' => 'simple',
             'config_by_type' => ['simple' => ['method' => 'percentage', 'value' => 10]],
