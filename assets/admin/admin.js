@@ -9,12 +9,13 @@
         }
         var id = $checkbox.data('id');
         var nonce = $checkbox.data('nonce');
+        var ajaxAction = $checkbox.data('ajax-action') || 'pd_toggle_rule_status';
         if (!id) {
             return;
         }
         $checkbox.prop('disabled', true);
         $.post(PowerDiscountAdmin.ajaxUrl, {
-            action: 'pd_toggle_rule_status',
+            action: ajaxAction,
             id: id,
             nonce: nonce
         }).done(function () {
@@ -329,9 +330,9 @@
         $wrap.find('.pd-schedule-monthly').toggle(mode === 'monthly');
     });
 
-    // --- Drag & drop reorder on rules list ---
-    function initRulesSortable() {
-        var $tbody = $('.pd-rules-list .wp-list-table tbody');
+    // --- Drag & drop reorder on rules list (generic) ---
+    function initSortableTable(selector, reorderAction) {
+        var $tbody = $(selector + ' .wp-list-table tbody');
         if (!$tbody.length || typeof $tbody.sortable !== 'function') {
             return;
         }
@@ -356,7 +357,7 @@
                 }).get();
                 $tbody.css('opacity', 0.5);
                 $.post(PowerDiscountAdmin.ajaxUrl, {
-                    action: 'pd_reorder_rules',
+                    action: reorderAction,
                     nonce: PowerDiscountAdmin.nonce,
                     ids: ids
                 }).done(function () {
@@ -371,7 +372,10 @@
 
     $(function () {
         initEnhancedSelects();
-        initRulesSortable();
+        // Main rules list uses .pd-rules-list; addon list has both classes
+        // for shared CSS, so exclude it here to avoid double-binding.
+        initSortableTable('.pd-rules-list:not(.pd-addons-list)', 'pd_reorder_rules');
+        initSortableTable('.pd-addons-list', 'pd_reorder_addon_rules');
     });
 
 })(jQuery);
