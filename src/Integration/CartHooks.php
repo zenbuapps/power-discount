@@ -138,16 +138,20 @@ final class CartHooks
     }
 
     /**
-     * Hash of cart items only (product ids + quantities). Intentionally excludes
-     * chosen shipping method and fees so the saving persists across the
-     * add-to-cart / cart-render request pair (chosen shipping is populated
-     * lazily on the render pass by WC).
+     * Hash of cart items + current rule revision. Excludes chosen shipping
+     * method and fees so the saving persists across the add-to-cart /
+     * cart-render request pair (chosen shipping is populated lazily by WC).
+     * Includes the rule revision so any rule CRUD in admin invalidates the
+     * stored savings immediately.
      */
     private function cartHash(\WC_Cart $cart): string
     {
-        $signature = [];
+        $signature = [
+            'revision' => RuleCacheBuster::current(),
+            'items'    => [],
+        ];
         foreach ($cart->get_cart_contents() as $key => $item) {
-            $signature[] = [
+            $signature['items'][] = [
                 (int) ($item['product_id'] ?? 0),
                 (int) ($item['variation_id'] ?? 0),
                 (int) ($item['quantity'] ?? 0),

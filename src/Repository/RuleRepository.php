@@ -5,6 +5,7 @@ namespace PowerDiscount\Repository;
 
 use PowerDiscount\Domain\Rule;
 use PowerDiscount\Domain\RuleStatus;
+use PowerDiscount\Integration\RuleCacheBuster;
 use PowerDiscount\Persistence\DatabaseAdapter;
 use PowerDiscount\Persistence\JsonSerializer;
 
@@ -25,7 +26,9 @@ final class RuleRepository
         $row = $this->toRow($rule);
         $row['created_at'] = $now;
         $row['updated_at'] = $now;
-        return $this->db->insert($this->table(), $row);
+        $id = $this->db->insert($this->table(), $row);
+        RuleCacheBuster::bump();
+        return $id;
     }
 
     public function update(Rule $rule): int
@@ -33,12 +36,16 @@ final class RuleRepository
         $row = $this->toRow($rule);
         unset($row['used_count']); // counter is mutated only via incrementUsedCount
         $row['updated_at'] = gmdate('Y-m-d H:i:s');
-        return $this->db->update($this->table(), $row, ['id' => $rule->getId()]);
+        $affected = $this->db->update($this->table(), $row, ['id' => $rule->getId()]);
+        RuleCacheBuster::bump();
+        return $affected;
     }
 
     public function delete(int $id): int
     {
-        return $this->db->delete($this->table(), ['id' => $id]);
+        $affected = $this->db->delete($this->table(), ['id' => $id]);
+        RuleCacheBuster::bump();
+        return $affected;
     }
 
     public function findById(int $id): ?Rule
@@ -150,6 +157,7 @@ final class RuleRepository
             );
             $position++;
         }
+        RuleCacheBuster::bump();
     }
 
     public function getMaxPriority(): int

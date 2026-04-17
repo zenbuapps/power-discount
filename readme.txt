@@ -6,7 +6,7 @@ Tags: woocommerce, discount, sale, promotion, taiwan
 Requires at least: 6.0
 Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -88,6 +88,11 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 目前 Reports 頁面可依日期區間查詢統計。未來版本會加上 CSV 匯出功能。
 
 == Changelog ==
+
+= 1.1.2 =
+* 修正「修改折扣規則後，已有商品的購物車顧客看到的運費與折扣仍是舊規則」的問題。以前必須請顧客清空購物車再加入一次商品才會套用新規則，有漏收或多收運費的風險。
+* 折扣規則 新增 / 編輯 / 刪除 / 拖拉排序 成功後，會自動失效 WooCommerce 全站 shipping rate session cache，確保所有現有顧客下次進購物車或結帳頁時，運費以最新規則重新計算。
+* 「已套用折扣」面板的運費節省金額，也會跟著規則變更即時更新，不需清空購物車。
 
 = 1.1.1 =
 * 修正條件免運規則在「已套用折扣」面板顯示 -NT$1 的問題，現在會顯示實際節省的運費金額
