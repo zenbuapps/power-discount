@@ -33,19 +33,19 @@ if (empty($ranges)) {
                         <button type="button" class="button button-small pd-repeater-remove">×</button>
                     </div>
                 <?php endforeach; ?>
+                <template class="pd-repeater-template">
+                    <div class="pd-repeater-row">
+                        <label><?php esc_html_e('From', 'power-discount'); ?> <input type="number" name="config_by_type[bulk][ranges][__INDEX__][from]" value="1" class="small-text" min="1"></label>
+                        <label><?php esc_html_e('to', 'power-discount'); ?> <input type="number" name="config_by_type[bulk][ranges][__INDEX__][to]" value="" class="small-text" min="1" placeholder="∞"></label>
+                        <select name="config_by_type[bulk][ranges][__INDEX__][method]">
+                            <option value="percentage">%</option>
+                            <option value="flat">Flat NT$</option>
+                        </select>
+                        <input type="number" step="0.01" min="0" name="config_by_type[bulk][ranges][__INDEX__][value]" value="" class="small-text">
+                        <button type="button" class="button button-small pd-repeater-remove">×</button>
+                    </div>
+                </template>
             </div>
-            <template class="pd-repeater-template">
-                <div class="pd-repeater-row">
-                    <label><?php esc_html_e('From', 'power-discount'); ?> <input type="number" name="config_by_type[bulk][ranges][__INDEX__][from]" value="1" class="small-text" min="1"></label>
-                    <label><?php esc_html_e('to', 'power-discount'); ?> <input type="number" name="config_by_type[bulk][ranges][__INDEX__][to]" value="" class="small-text" min="1" placeholder="∞"></label>
-                    <select name="config_by_type[bulk][ranges][__INDEX__][method]">
-                        <option value="percentage">%</option>
-                        <option value="flat">Flat NT$</option>
-                    </select>
-                    <input type="number" step="0.01" min="0" name="config_by_type[bulk][ranges][__INDEX__][value]" value="" class="small-text">
-                    <button type="button" class="button button-small pd-repeater-remove">×</button>
-                </div>
-            </template>
             <p><button type="button" class="button pd-repeater-add" data-pd-add="bulk-range">+ <?php esc_html_e('Add tier', 'power-discount'); ?></button></p>
         </td>
     </tr>

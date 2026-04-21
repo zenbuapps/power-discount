@@ -30,21 +30,21 @@ $recursive = !empty($config['recursive']);
                         <button type="button" class="button button-small pd-repeater-remove">×</button>
                     </div>
                 <?php endforeach; ?>
+                <template class="pd-repeater-template">
+                    <div class="pd-repeater-row">
+                        <label><?php esc_html_e('Nth item:', 'power-discount'); ?>
+                            <input type="number" name="config_by_type[nth_item][tiers][__INDEX__][nth]" value="1" class="small-text" min="1">
+                        </label>
+                        <select name="config_by_type[nth_item][tiers][__INDEX__][method]">
+                            <option value="percentage">%</option>
+                            <option value="flat">Flat NT$</option>
+                            <option value="free">Free</option>
+                        </select>
+                        <input type="number" step="0.01" min="0" name="config_by_type[nth_item][tiers][__INDEX__][value]" value="" class="small-text">
+                        <button type="button" class="button button-small pd-repeater-remove">×</button>
+                    </div>
+                </template>
             </div>
-            <template class="pd-repeater-template">
-                <div class="pd-repeater-row">
-                    <label><?php esc_html_e('Nth item:', 'power-discount'); ?>
-                        <input type="number" name="config_by_type[nth_item][tiers][__INDEX__][nth]" value="1" class="small-text" min="1">
-                    </label>
-                    <select name="config_by_type[nth_item][tiers][__INDEX__][method]">
-                        <option value="percentage">%</option>
-                        <option value="flat">Flat NT$</option>
-                        <option value="free">Free</option>
-                    </select>
-                    <input type="number" step="0.01" min="0" name="config_by_type[nth_item][tiers][__INDEX__][value]" value="" class="small-text">
-                    <button type="button" class="button button-small pd-repeater-remove">×</button>
-                </div>
-            </template>
             <p><button type="button" class="button pd-repeater-add" data-pd-add="nth-tier">+ <?php esc_html_e('Add tier', 'power-discount'); ?></button></p>
         </td>
     </tr>
