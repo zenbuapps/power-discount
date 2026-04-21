@@ -51,7 +51,8 @@ final class AppliedRulesDisplay
             return;
         }
 
-        $entries = $this->buildEntries($results);
+        $shippingSavings = $this->cartHooks->getShippingSavingsForCart(WC()->cart);
+        $entries = $this->buildEntries($results, $shippingSavings);
         if ($entries === []) {
             return;
         }
@@ -149,10 +150,11 @@ final class AppliedRulesDisplay
     }
 
     /**
-     * @param DiscountResult[] $results
+     * @param DiscountResult[]     $results
+     * @param array<int, float>    $shippingSavings ruleId => actual shipping saving
      * @return array<int, array{label:string, amount:float, scope_text:string}>
      */
-    private function buildEntries(array $results): array
+    private function buildEntries(array $results, array $shippingSavings = []): array
     {
         $entries = [];
         foreach ($results as $result) {
@@ -164,9 +166,17 @@ final class AppliedRulesDisplay
                 $label = __('Discount', 'power-discount');
             }
 
+            // For shipping scope, the strategy returns a sentinel amount (1.0); the
+            // real saving is tracked by ShippingHooks against the chosen rate.
+            if ($result->getScope() === DiscountResult::SCOPE_SHIPPING) {
+                $amount = (float) ($shippingSavings[$result->getRuleId()] ?? 0.0);
+            } else {
+                $amount = (float) $result->getAmount();
+            }
+
             $entries[] = [
                 'label'      => (string) $label,
-                'amount'     => (float) $result->getAmount(),
+                'amount'     => $amount,
                 'scope_text' => $this->scopeText($result),
             ];
         }
